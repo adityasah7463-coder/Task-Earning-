@@ -1,0 +1,3219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Earn App</title>
+<!-- AdMob SDK -->
+
+<!-- AdMob / AdSense SDK -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5428273092045113"
+  crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  font-family:'Nunito',sans-serif;
+  background:#c97a10;
+  min-height:100vh;
+  max-width:430px;
+  margin:0 auto;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* ═══════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════ */
+.page { display:none; min-height:100vh; flex-direction:column; background:#c97a10; }
+.page.active { display:flex; animation:fadeSlide .32s ease; }
+@keyframes fadeSlide {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ═══════════════════════════════
+   AUTH PAGES
+═══════════════════════════════ */
+.auth-page {
+  align-items:center;
+  justify-content:flex-start;
+  padding:60px 28px 50px;
+  gap:0;
+}
+
+/* ── APP LOGO ── */
+.logo-wrap {
+  width:155px; height:155px;
+  background:linear-gradient(160deg,#f07832,#e55e10);
+  border-radius:36px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:42px;
+  box-shadow:0 10px 36px rgba(0,0,0,.28), inset 0 2px 0 rgba(255,255,255,.18);
+  position:relative; overflow:hidden;
+}
+.logo-wrap svg { width:105px; height:105px; }
+
+/* ── TITLE ── */
+.auth-title {
+  color:#fff;
+  font-size:34px; font-weight:900;
+  text-shadow:0 2px 8px rgba(0,0,0,.25);
+  margin-bottom:36px;
+  text-align:center;
+  letter-spacing:-.3px;
+}
+
+/* ── INPUT GROUP ── */
+.input-group { width:100%; display:flex; flex-direction:column; gap:16px; margin-bottom:22px; }
+
+.input-row {
+  display:flex; align-items:center;
+  background:rgba(180,105,10,.48);
+  border-radius:50px;
+  border:none;
+  height:62px;
+  overflow:hidden;
+}
+.input-icon-wrap {
+  width:62px; height:62px; flex-shrink:0;
+  background:rgba(155,85,5,.55);
+  border-radius:50%;
+  margin:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.input-icon-wrap svg { width:26px; height:26px; }
+.input-row input {
+  flex:1; background:transparent; border:none; outline:none;
+  color:#fff;
+  font-family:'Nunito',sans-serif;
+  font-size:16px; font-weight:700;
+  padding:0 18px 0 12px;
+}
+.input-row input::placeholder { color:rgba(255,255,255,.68); font-weight:700; }
+
+/* ── TERMS ── */
+.terms-row {
+  display:flex; align-items:flex-start; gap:14px;
+  margin-bottom:30px; width:100%;
+}
+.custom-checkbox {
+  width:26px; height:26px; flex-shrink:0; margin-top:1px;
+  background:rgba(255,255,255,.9);
+  border-radius:5px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid rgba(255,200,80,.6);
+}
+.custom-checkbox.checked { background:#fff; }
+.custom-checkbox svg { display:none; width:18px; height:18px; }
+.custom-checkbox.checked svg { display:block; }
+.terms-text {
+  color:#fff; font-size:14px; font-weight:700; line-height:1.6;
+}
+.terms-text a { color:#fff; text-decoration:underline; }
+
+/* ── BIG BUTTON ── */
+.auth-btn {
+  width:100%; height:64px;
+  background:linear-gradient(180deg,#ffd050 0%,#e89010 45%,#cf7800 100%);
+  color:#fff;
+  font-family:'Nunito',sans-serif;
+  font-weight:900; font-size:24px; letter-spacing:3px;
+  border:none; border-radius:50px;
+  cursor:pointer;
+  box-shadow:0 6px 22px rgba(0,0,0,.3), inset 0 2px 0 rgba(255,255,255,.3);
+  position:relative; overflow:hidden;
+  transition:transform .12s;
+  margin-bottom:26px;
+}
+.auth-btn::before {
+  content:'';
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(
+    105deg,
+    transparent 0, transparent 20px,
+    rgba(255,255,255,.09) 20px, rgba(255,255,255,.09) 34px
+  );
+}
+.auth-btn:active { transform:scale(.97); }
+
+/* ── SWITCH LINK ── */
+.switch-link {
+  color:#fff; font-size:15px; font-weight:800;
+  text-decoration:underline; cursor:pointer; text-align:center;
+}
+
+/* ═══════════════════════════════
+   HOME PAGE
+═══════════════════════════════ */
+
+/* TOP BAR */
+.topbar {
+  background:#6b3800;
+  padding:13px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0;
+}
+.topbar-left { display:flex; align-items:center; gap:12px; }
+.avatar {
+  width:50px; height:50px; border-radius:50%;
+  background:linear-gradient(135deg,#ff9d2f,#e06000);
+  display:flex; align-items:center; justify-content:center;
+  font-size:28px; border:2.5px solid #ff9d2f;
+  overflow:hidden; flex-shrink:0;
+}
+.greeting-name { color:#fff; font-size:17px; font-weight:900; }
+.greeting-sub  { color:#ffcf70; font-size:13px; font-weight:700; }
+
+.coins-pill {
+  background:linear-gradient(135deg,#ffba2a,#e07800);
+  border-radius:30px;
+  padding:7px 18px 7px 10px;
+  display:flex; align-items:center; gap:6px;
+  box-shadow:0 3px 12px rgba(0,0,0,.28);
+}
+.coins-pill .cp-icon { font-size:28px; line-height:1; }
+.coins-pill .cp-num  { color:#fff; font-size:22px; font-weight:900; }
+
+/* CONTENT SCROLL */
+.home-content {
+  flex:1; overflow-y:auto;
+  padding:13px 13px 86px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.home-content::-webkit-scrollbar { display:none; }
+
+/* CARDS */
+.card {
+  border-radius:18px;
+  background:#b86500;
+  position:relative; overflow:hidden;
+  cursor:pointer;
+  box-shadow:0 4px 18px rgba(0,0,0,.22);
+  transition:transform .14s;
+}
+.card:active { transform:scale(.975); }
+
+/* sunburst */
+.card::before {
+  content:''; position:absolute;
+  top:50%; left:50%;
+  width:280%; height:280%;
+  transform:translate(-50%,-50%);
+  background:repeating-conic-gradient(
+    rgba(255,195,70,.12) 0deg 10deg,
+    transparent 10deg 20deg
+  );
+  border-radius:50%; pointer-events:none;
+}
+
+/* Wide cards */
+.card-wide {
+  padding:20px 22px;
+  display:flex; align-items:center;
+  justify-content:space-between;
+  min-height:148px;
+}
+.cw-left { z-index:1; }
+.cw-title {
+  color:#fff; font-size:28px; font-weight:900;
+  text-shadow:0 2px 8px rgba(0,0,0,.3);
+  margin-bottom:14px; line-height:1.1;
+}
+.cw-icon { font-size:82px; z-index:1; animation:float 3s ease-in-out infinite; filter:drop-shadow(0 4px 10px rgba(0,0,0,.3)); }
+
+/* Grid cards */
+.card-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.card-small {
+  padding:16px 16px 14px;
+  min-height:168px;
+  display:flex; flex-direction:column;
+  justify-content:space-between;
+}
+.cs-title {
+  color:#fff; font-size:19px; font-weight:900;
+  text-shadow:0 2px 5px rgba(0,0,0,.28);
+  line-height:1.2; z-index:1;
+}
+.cs-icon {
+  font-size:54px; text-align:center; z-index:1;
+  filter:drop-shadow(0 3px 7px rgba(0,0,0,.28));
+  animation:float 3s ease-in-out infinite;
+}
+
+/* icon-only card (Wallet/Redeem/Telegram/Rate) */
+.card-icon-only {
+  min-height:168px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:12px; padding:16px;
+}
+.ci-icon {
+  font-size:66px; z-index:1;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.3));
+  animation:float 3s ease-in-out infinite;
+}
+.ci-label {
+  color:#fff; font-size:22px; font-weight:900;
+  text-shadow:0 2px 6px rgba(0,0,0,.28);
+  z-index:1; text-align:center;
+}
+
+/* Telegram box */
+.tg-box {
+  width:74px; height:74px;
+  background:#29b6f6; border-radius:20px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:42px; z-index:1;
+  box-shadow:0 4px 16px rgba(0,0,0,.28);
+  animation:float 3s ease-in-out infinite;
+}
+
+/* BUTTONS */
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  background:linear-gradient(180deg,#ffc840 0%,#e08000 100%);
+  color:#7a3800;
+  font-family:'Nunito',sans-serif;
+  font-weight:900; font-size:15px;
+  padding:11px 24px;
+  border-radius:50px; border:none; cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.25), inset 0 1.5px 0 rgba(255,255,255,.35);
+  letter-spacing:.5px; position:relative; z-index:1;
+  transition:transform .1s;
+}
+.btn:active { transform:scale(.94); }
+.btn-circle {
+  width:22px; height:22px;
+  background:#7a3800; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.btn-circle svg { width:10px; height:10px; fill:#ffc840; }
+
+/* SPIN WHEEL */
+.wheel-wrap { position:relative; z-index:1; flex-shrink:0; }
+.wheel {
+  width:94px; height:94px; border-radius:50%;
+  background:conic-gradient(
+    #e53935 0deg 60deg, #fff 60deg 120deg,
+    #e53935 120deg 180deg, #fff 180deg 240deg,
+    #e53935 240deg 300deg, #fff 300deg 360deg
+  );
+  border:7px solid #f5c000;
+  box-shadow:0 0 0 4px #b28800, 0 6px 22px rgba(0,0,0,.35);
+  position:relative;
+  animation:spin-idle 9s linear infinite;
+}
+.wheel::after {
+  content:''; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:24px; height:24px;
+  background:#2a2a2a; border-radius:50%;
+  border:3px solid #777;
+  box-shadow:0 0 8px rgba(0,0,0,.5);
+}
+.wheel-dots {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  border-radius:50%; pointer-events:none;
+}
+.wheel-pin {
+  position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+  width:0; height:0;
+  border-left:9px solid transparent;
+  border-right:9px solid transparent;
+  border-top:20px solid #1e88e5;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));
+  z-index:2;
+}
+.wheel-stand { width:15px; height:22px; background:#888; margin:0 auto; border-radius:0 0 5px 5px; }
+.wheel-base  { width:54px; height:11px; background:#aaa; margin:0 auto; border-radius:7px; }
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:430px;
+  background:#5a2c00;
+  display:flex; justify-content:space-around; align-items:center;
+  padding:11px 0 18px;
+  z-index:200;
+  box-shadow:0 -3px 18px rgba(0,0,0,.35);
+}
+.nav-btn {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  color:#ffcf70; font-size:11px; font-weight:800;
+  opacity:.65; cursor:pointer; transition:opacity .15s;
+  background:none; border:none;
+}
+.nav-btn.active { opacity:1; color:#ffd855; }
+.nav-btn svg { width:24px; height:24px; }
+.nav-dot {
+  width:32px; height:32px;
+  background:#ffb820; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+.nav-dot svg { width:16px; height:16px; fill:#7a3800; }
+
+/* TOAST */
+.toast {
+  position:fixed; top:26px; left:50%; transform:translateX(-50%);
+  background:rgba(30,14,0,.93); color:#ffd855;
+  padding:13px 30px; border-radius:30px;
+  font-size:15px; font-weight:800;
+  z-index:9999; opacity:0; pointer-events:none;
+  transition:opacity .28s;
+  border:1.5px solid rgba(255,200,70,.28);
+  box-shadow:0 4px 22px rgba(0,0,0,.35);
+  white-space:nowrap;
+}
+.toast.show { opacity:1; }
+
+/* ANIMATIONS */
+@keyframes float {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-7px); }
+}
+@keyframes spin-idle {
+  from { transform:rotate(0deg); }
+  to   { transform:rotate(360deg); }
+}
+
+/* ══ WALLET PAGE ══ */
+.wallet-balance-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 18px; border-bottom:2px solid rgba(255,255,255,.15);
+  flex-shrink:0;
+}
+.wallet-bal-left { display:flex; align-items:center; gap:14px; }
+.wallet-bal-icon { font-size:44px; }
+.wallet-bal-num  { color:#fff; font-size:36px; font-weight:900; line-height:1; }
+.wallet-bal-label{ color:rgba(255,255,255,.7); font-size:14px; font-weight:700; }
+.wallet-redeem-btn {
+  background:linear-gradient(180deg,#ffd050,#e89010);
+  color:#7a3800; font-family:'Nunito',sans-serif;
+  font-weight:900; font-size:16px;
+  padding:13px 26px; border-radius:50px; border:none; cursor:pointer;
+  position:relative; overflow:hidden;
+}
+.wallet-tabs {
+  display:flex; background:rgba(0,0,0,.15); flex-shrink:0;
+}
+.wallet-tab {
+  flex:1; padding:14px; text-align:center;
+  color:rgba(255,255,255,.65); font-size:15px; font-weight:900;
+  cursor:pointer; border:none; background:none;
+  border-bottom:3px solid transparent; font-family:'Nunito',sans-serif;
+}
+.wallet-tab.active { color:#fff; border-bottom-color:#fff; }
+.wallet-tab-content { flex:1; overflow-y:auto; }
+.wallet-tab-content::-webkit-scrollbar { display:none; }
+.tx-item {
+  display:flex; align-items:center; gap:14px;
+  padding:16px 18px; border-bottom:1px solid rgba(255,255,255,.1);
+}
+.tx-icon  { font-size:36px; flex-shrink:0; }
+.tx-info  { flex:1; }
+.tx-name  { color:#fff; font-size:15px; font-weight:800; }
+.tx-date  { color:rgba(255,255,255,.6); font-size:12px; font-weight:600; margin-top:2px; }
+.tx-amount{ color:#ffd855; font-size:17px; font-weight:900; }
+.wallet-empty {
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:14px; padding:60px 20px;
+}
+.wallet-empty-icon { font-size:60px; }
+.wallet-empty-text { color:rgba(255,255,255,.8); font-size:16px; font-weight:800; }
+
+/* ══ REDEEM PAGE ══ */
+.redeem-grid {
+  flex:1; overflow-y:auto; padding:14px;
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+.redeem-grid::-webkit-scrollbar { display:none; }
+.redeem-item {
+  background:#fff; border-radius:16px;
+  padding:18px 12px 14px;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  cursor:pointer; transition:transform .12s;
+  box-shadow:0 4px 14px rgba(0,0,0,.12);
+}
+.redeem-item:active { transform:scale(.96); }
+.redeem-icon  { font-size:44px; }
+.redeem-label { font-size:13px; font-weight:800; color:#333; text-align:center; line-height:1.4; }
+.redeem-play-icon2 {
+  width:60px; height:60px; background:#fff;
+  border-radius:14px; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+
+/* ══ COMMON PAGE TOPBAR ══ */
+.page-topbar {
+  background:#6b3800; padding:14px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0;
+}
+.page-back  { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; padding:0; }
+.page-title { color:#fff; font-size:18px; font-weight:900; }
+.page-badge { color:#fff; font-size:15px; font-weight:900; }
+.page-badge span { color:#ffd855; font-size:20px; }
+
+/* ══ REFER PAGE ══ */
+.refer-topbar { background:#6b3800; padding:14px 18px; display:flex; align-items:center; gap:14px; flex-shrink:0; }
+.refer-back { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; padding:0; }
+.refer-topbar-title { color:#fff; font-size:18px; font-weight:900; }
+.refer-content { flex:1; overflow-y:auto; display:flex; flex-direction:column; align-items:center; padding:30px 20px 60px; gap:28px; }
+.refer-content::-webkit-scrollbar { display:none; }
+.refer-link-box { width:100%; border:2px dashed rgba(255,255,255,.6); border-radius:12px; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.refer-reward-label { color:rgba(255,255,255,.85); font-size:18px; font-weight:700; text-align:center; }
+.refer-reward-amount { color:#fff; font-size:42px; font-weight:900; text-align:center; margin-top:-10px; }
+.refer-share-row { display:flex; gap:24px; justify-content:center; }
+.refer-share-circle { width:68px; height:68px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 4px 16px rgba(0,0,0,.15); }
+.refer-share-label { color:rgba(255,255,255,.9); font-size:13px; font-weight:800; text-align:center; }
+.refer-info { color:#fff; font-size:15px; font-weight:700; text-align:center; line-height:1.7; padding:0 10px; }
+.refer-copied { display:none; position:fixed; top:28px; left:50%; transform:translateX(-50%); background:#333; color:#ffd855; padding:12px 28px; border-radius:30px; font-size:15px; font-weight:800; z-index:9999; white-space:nowrap; }
+.refer-copied.show { display:block; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════
+     LOGIN PAGE
+═══════════════════════════════════ -->
+<div class="page auth-page active" id="page-login">
+
+  <!-- Logo -->
+  <div class="logo-wrap">
+    <svg viewBox="0 0 105 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- money notes -->
+      <rect x="20" y="18" width="52" height="34" rx="5" fill="#4caf50" transform="rotate(-12 20 18)"/>
+      <rect x="20" y="18" width="52" height="34" rx="5" fill="#66bb6a" transform="rotate(-6 20 18)"/>
+      <rect x="20" y="22" width="52" height="34" rx="5" fill="#81c784"/>
+      <circle cx="46" cy="39" r="10" fill="#388e3c"/>
+      <circle cx="46" cy="39" r="6" fill="#4caf50"/>
+      <!-- checkmark -->
+      <path d="M22 70 Q30 58 44 80 Q60 48 82 42" stroke="#a04010" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="auth-title">Login Here!</div>
+
+  <div class="input-group">
+    <!-- Phone -->
+    <div class="input-row">
+      <div class="input-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+      </div>
+      <input type="tel" id="login-phone" placeholder="Enter Phone Number" />
+    </div>
+    <!-- Email -->
+    <div class="input-row">
+      <div class="input-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </div>
+      <input type="email" id="login-email" placeholder="Select Gmail Id" />
+    </div>
+  </div>
+
+  <button class="auth-btn" onclick="doLogin()">LOGIN</button>
+  <span class="switch-link" onclick="showPage('page-signup')">No Account ? Click to SignUp</span>
+
+</div>
+
+<!-- ═══════════════════════════════════
+     SIGN UP PAGE
+═══════════════════════════════════ -->
+<div class="page auth-page" id="page-signup">
+
+  <div class="logo-wrap">
+    <svg viewBox="0 0 105 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="18" width="52" height="34" rx="5" fill="#4caf50" transform="rotate(-12 20 18)"/>
+      <rect x="20" y="18" width="52" height="34" rx="5" fill="#66bb6a" transform="rotate(-6 20 18)"/>
+      <rect x="20" y="22" width="52" height="34" rx="5" fill="#81c784"/>
+      <circle cx="46" cy="39" r="10" fill="#388e3c"/>
+      <circle cx="46" cy="39" r="6" fill="#4caf50"/>
+      <path d="M22 70 Q30 58 44 80 Q60 48 82 42" stroke="#a04010" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="auth-title">Sign Up Here!</div>
+
+  <div class="input-group">
+    <!-- Name -->
+    <div class="input-row">
+      <div class="input-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <input type="text" id="signup-name" placeholder="Full Name" />
+    </div>
+    <!-- Phone -->
+    <div class="input-row">
+      <div class="input-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+      </div>
+      <input type="tel" id="signup-phone" placeholder="Phone Number" />
+    </div>
+    <!-- Email — Google Account Picker -->
+    <div class="input-row" onclick="openEmailPicker()" style="cursor:pointer; user-select:none;">
+      <div class="input-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </div>
+      <div id="email-display" style="flex:1;color:rgba(255,255,255,.65);font-size:16px;font-weight:700;padding:0 10px;">Select Gmail Id</div>
+      <div style="padding-right:16px;color:rgba(255,255,255,.5);font-size:20px;">&#9662;</div>
+    </div>
+    <input type="email" id="signup-email" autocomplete="email" style="display:none;" oninput="if(this.value.includes('@')){selectEmail(this.value);}" />
+  </div>
+
+  <!-- Gmail Account Picker Sheet -->
+  <div id="gmail-picker" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:900;max-width:430px;left:50%;transform:translateX(-50%);align-items:flex-end;">
+    <div style="background:#fff;border-radius:22px 22px 0 0;width:100%;padding:0 0 40px;max-height:75vh;overflow-y:auto;box-shadow:0 -4px 30px rgba(0,0,0,.3);">
+      <!-- Handle -->
+      <div style="padding:14px 0 8px;display:flex;justify-content:center;">
+        <div style="width:40px;height:4px;background:#ddd;border-radius:4px;"></div>
+      </div>
+      <!-- Title -->
+      <div style="padding:6px 20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0;">
+        <div>
+          <div style="font-size:16px;font-weight:900;color:#222;font-family:Nunito,sans-serif;">Gmail Account Chuniye</div>
+          <div style="font-size:12px;color:#888;font-weight:700;margin-top:2px;">Device ke accounts</div>
+        </div>
+        <button onclick="closeEmailPicker()" style="background:#f0f0f0;border:none;border-radius:50%;width:32px;height:32px;font-size:18px;color:#555;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#215;</button>
+      </div>
+      <!-- Account list -->
+      <div id="gmail-account-list" style="padding:8px 0;"></div>
+      <!-- Manual entry -->
+      <div style="padding:14px 20px 0;border-top:1px solid #f0f0f0;">
+        <div style="font-size:12px;color:#aaa;font-weight:800;letter-spacing:.5px;margin-bottom:10px;">YA MANUALLY LIKHO</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input type="email" id="manual-email-input" placeholder="example@gmail.com"
+            style="flex:1;padding:13px 14px;border:1.5px solid #e0e0e0;border-radius:12px;font-size:15px;font-family:Nunito,sans-serif;outline:none;color:#333;"
+            onfocus="this.style.borderColor='#c97a10'" onblur="this.style.borderColor='#e0e0e0'"
+          />
+          <button onclick="selectManualEmail()" style="background:#c97a10;color:#fff;border:none;border-radius:12px;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer;font-family:Nunito,sans-serif;white-space:nowrap;">OK ✓</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms -->
+  <div class="terms-row">
+    <div class="custom-checkbox checked" id="terms-box" onclick="toggleTerms()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e08000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <div class="terms-text">
+      Before continue please read and accept
+      <a href="#">Terms and Condition</a> and <a href="#">Privacy Policy</a>
+    </div>
+  </div>
+
+  <button class="auth-btn" onclick="doSignup()">SIGN UP</button>
+  <span class="switch-link" onclick="showPage('page-login')">Already Account ? Click to Login</span>
+
+</div>
+
+<!-- ═══════════════════════════════════
+     HOME PAGE
+═══════════════════════════════════ -->
+<div class="page" id="page-home">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="avatar">😊</div>
+      <div>
+        <div class="greeting-name" id="greet-name">Hey, Ranjan</div>
+        <div class="greeting-sub">Welcome Back!</div>
+      </div>
+    </div>
+    <div class="coins-pill">
+      <span class="cp-icon">🪙</span>
+      <span class="cp-num" id="coin-count">0</span>
+    </div>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="home-content">
+
+    <!-- Refer & Earn -->
+    <div class="card card-wide" onclick="showPage('page-refer')">
+      <div class="cw-left">
+        <div class="cw-title">Refer &amp; Earn</div>
+        <button class="btn" onclick="showPage('page-refer')">OPEN</button>
+      </div>
+      <div class="cw-icon">💰</div>
+    </div>
+
+    <!-- Daily Bonus + Promocode -->
+    <div class="card-grid">
+      <div class="card card-small">
+        <div class="cs-title">Daily<br>Bonus</div>
+        <div class="cs-icon" style="animation-delay:.3s;">🏅</div>
+      </div>
+      <div class="card card-small">
+        <div class="cs-title">Promocode<br>Redeem</div>
+        <div class="cs-icon" style="animation-delay:.6s;">🎟️</div>
+      </div>
+    </div>
+
+    <!-- Spin & Win -->
+    <div class="card card-wide" onclick="showPage('page-spin')">
+      <div class="cw-left">
+        <div class="cw-title">Spin &amp; Win</div>
+        <button class="btn" onclick="showPage('page-spin')">
+          <span class="btn-circle"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></span>
+          PLAY
+        </button>
+      </div>
+      <div class="wheel-wrap">
+        <div class="wheel-pin"></div>
+        <div class="wheel"></div>
+        <div class="wheel-stand"></div>
+        <div class="wheel-base"></div>
+      </div>
+    </div>
+
+    <!-- News Bonus + Watch Video -->
+    <div class="card-grid">
+      <div class="card card-small" onclick="showPage('page-news')">
+        <div class="cs-title">News<br>Bonus</div>
+        <div class="cs-icon" style="animation-delay:.2s;">📢</div>
+        <button class="btn" onclick="showPage('page-news')">
+          <span class="btn-circle"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></span>
+          OPEN
+        </button>
+      </div>
+      <div class="card card-small" onclick="startWatchAd()">
+        <div class="cs-title">Watch<br>Video</div>
+        <div class="cs-icon" style="animation-delay:.5s;">📺</div>
+        <button class="btn" id="watchVideoBtn" onclick="startWatchAd()">
+          <span class="btn-circle"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></span>
+          PLAY
+        </button>
+      </div>
+    </div>
+
+    <!-- Scratch Card -->
+    <div class="card card-wide" onclick="showPage('page-scratch')">
+      <div class="cw-left">
+        <div class="cw-title">Scratch<br>Card</div>
+        <button class="btn" onclick="showPage('page-scratch')">
+          <span class="btn-circle"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></span>
+          PLAY
+        </button>
+      </div>
+      <div class="cw-icon" style="font-size:88px; animation-delay:.4s;">🥇</div>
+    </div>
+
+    <!-- Wallet + Redeem -->
+    <div class="card-grid">
+      <div class="card card-icon-only" onclick="showPage('page-wallet')">
+        <div class="ci-icon" style="animation-delay:.3s;">💸</div>
+        <div class="ci-label">Wallet</div>
+      </div>
+      <div class="card card-icon-only" onclick="showPage('page-redeem')">
+        <div class="ci-icon" style="animation-delay:.7s;">🎁</div>
+        <div class="ci-label">Redeem</div>
+      </div>
+    </div>
+
+    <!-- Join Telegram + Rate Us -->
+    <div class="card-grid">
+      <div class="card card-icon-only">
+        <div class="tg-box">✈️</div>
+        <div class="ci-label">Join Telegram</div>
+      </div>
+      <div class="card card-icon-only">
+        <div class="ci-icon" style="animation-delay:.5s;">👍</div>
+        <div class="ci-label">Rate Us</div>
+      </div>
+    </div>
+
+  </div><!-- /home-content -->
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      Scratch
+    </button>
+    <div class="nav-dot">
+      <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/></svg>
+    </div>
+    <button class="nav-btn" onclick="logout()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h13v-2H3v2zm0-5h10v-2H3v2zm0-7v2h13V6H3zm18 9.59L17.42 12 21 8.41 19.59 7l-5 5 5 5L21 15.59z"/></svg>
+      Logout
+    </button>
+  </div>
+
+</div><!-- /page-home -->
+
+
+
+<!-- ═══════════════════════════════════
+     SPIN WHEEL PAGE STYLES
+═══════════════════════════════════ -->
+<style>
+/* Spin page */
+#page-spin {
+  background: #c97a10;
+  align-items: center;
+}
+
+/* Spin topbar */
+.spin-topbar {
+  width: 100%;
+  background: #6b3800;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.spin-topbar-left {
+  display: flex; align-items: center; gap: 12px;
+}
+.spin-back-btn {
+  background: none; border: none; cursor: pointer;
+  color: #fff; font-size: 22px; padding: 0;
+}
+.spin-topbar-title {
+  color: #fff; font-size: 18px; font-weight: 900;
+}
+.spin-count {
+  color: #fff; font-size: 17px; font-weight: 900;
+  display: flex; align-items: center; gap: 6px;
+}
+.spin-count span { color: #ffd855; font-size: 22px; }
+
+/* Wheel container */
+.wheel-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 30px 20px 40px;
+}
+
+/* Big wheel */
+.big-wheel-wrap {
+  position: relative;
+  width: 300px; height: 300px;
+}
+.big-wheel-pin {
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 30px; height: 50px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.pin-top {
+  width: 20px; height: 18px;
+  background: linear-gradient(180deg, #ffd700, #ffaa00);
+  border-radius: 4px 4px 0 0;
+}
+.pin-bottom {
+  width: 0; height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 20px solid #cc44cc;
+}
+
+#bigWheel {
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  border: 8px solid #111;
+  box-shadow:
+    0 0 0 3px rgba(150,80,200,.5),
+    0 8px 40px rgba(0,0,0,.5);
+  position: relative;
+  transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+/* Spin Now button */
+.spin-now-btn {
+  width: 88%;
+  height: 66px;
+  background: linear-gradient(180deg, #ffd050 0%, #e89010 50%, #cf7800 100%);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900; font-size: 22px; letter-spacing: 2px;
+  border: none; border-radius: 50px; cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0,0,0,.3), inset 0 2px 0 rgba(255,255,255,.3);
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  transition: transform .12s;
+}
+.spin-now-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    105deg, transparent 0, transparent 20px,
+    rgba(255,255,255,.09) 20px, rgba(255,255,255,.09) 34px
+  );
+}
+.spin-now-btn:active { transform: scale(.97); }
+.spin-now-btn:disabled { opacity: .6; cursor: not-allowed; }
+.spin-play-circle {
+  width: 30px; height: 30px;
+  background: rgba(120,60,0,.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1;
+  font-size: 14px;
+}
+.spin-now-btn span.label { z-index: 1; }
+
+/* AD POPUP OVERLAY */
+/* ══ GOOGLE ADMOB OVERLAY ══ */
+.scratch-ad-overlay { display:none; position:fixed; inset:0; background:#000; z-index:900; flex-direction:column; max-width:430px; left:50%; transform:translateX(-50%); }
+.admob-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: #000;
+  z-index: 600;
+  flex-direction: column;
+  max-width: 430px;
+  left: 50%; transform: translateX(-50%);
+}
+.admob-overlay.show { display: flex; }
+
+.admob-content {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: #111;
+  overflow: hidden;
+  position: relative;
+}
+
+.admob-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 18px;
+  background: linear-gradient(160deg,#0d0d1a,#1a1428);
+  padding: 40px 30px;
+}
+.admob-placeholder-logo { font-size: 64px; }
+.admob-placeholder-text {
+  color: #666; font-size: 14px; font-weight: 700;
+  text-align: center; line-height: 1.9;
+}
+.admob-placeholder-text strong {
+  color: #aaa; font-size: 18px; display: block; margin-bottom: 6px;
+}
+.admob-placeholder-text code { font-size: 11px; }
+
+/* Fake skip button — matches AdMob style */
+.fake-skip-btn {
+  margin-top: 10px;
+  background: rgba(255,255,255,.1);
+  border: 1.5px solid rgba(255,255,255,.2);
+  border-radius: 8px;
+  color: #ccc; font-family: 'Nunito',sans-serif;
+  font-size: 14px; font-weight: 800;
+  padding: 12px 28px; cursor: not-allowed;
+  transition: all .3s;
+}
+.fake-skip-btn.ready {
+  background: #1a73e8; color: #fff;
+  border-color: #1a73e8;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(26,115,232,.5);
+}
+.fake-skip-btn.ready:hover { background: #1557b0; }
+
+/* RESULT SCREEN */
+#page-spin-result {
+  background: #c97a10;
+  align-items: center;
+  justify-content: flex-start;
+}
+.result-topbar {
+  width: 100%;
+  background: #6b3800;
+  padding: 14px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.result-number-wrap {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.result-number {
+  color: #fff;
+  font-size: 140px; font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 4px 30px rgba(0,0,0,.2);
+  animation: popIn .5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes popIn {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.reward-toast-bar {
+  position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+  background: #1a1a1a;
+  border-radius: 40px;
+  padding: 14px 30px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 18px; font-weight: 800; color: #fff;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  animation: slideUp .4s ease both;
+}
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(30px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* ══ SPEED OPTION OVERLAY ══ */
+.speed-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.85);
+  z-index: 700;
+  align-items: center;
+  justify-content: center;
+  max-width: 430px;
+  left: 50%; transform: translateX(-50%);
+}
+.speed-overlay.show { display: flex; animation: fadeSlide .3s ease; }
+
+.speed-card {
+  background: linear-gradient(160deg, #1e2640, #2a1e40);
+  border-radius: 24px;
+  padding: 32px 24px 24px;
+  width: 88%;
+  max-width: 360px;
+  box-shadow: 0 16px 60px rgba(0,0,0,.7);
+  border: 1px solid rgba(150,100,255,.25);
+  display: flex; flex-direction: column; gap: 14px;
+  align-items: center;
+}
+.speed-header { text-align: center; margin-bottom: 6px; }
+.speed-icon {
+  font-size: 52px; line-height: 1;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 16px rgba(255,220,50,.5));
+  animation: pulse-icon 1.5s ease-in-out infinite;
+}
+@keyframes pulse-icon {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+.speed-title {
+  color: #fff; font-size: 22px; font-weight: 900;
+  margin-bottom: 6px;
+}
+.speed-sub {
+  color: #aaa; font-size: 14px; font-weight: 700; line-height: 1.5;
+}
+.speed-btn-yes {
+  width: 100%; height: 58px;
+  background: linear-gradient(135deg, #4CAF50, #2e7d32);
+  border: none; border-radius: 14px;
+  color: #fff; font-family: 'Nunito', sans-serif;
+  font-size: 17px; font-weight: 900;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 4px 20px rgba(76,175,80,.4);
+  transition: transform .12s, box-shadow .12s;
+}
+.speed-btn-yes:active { transform: scale(.97); }
+.speed-btn-yes span { font-size: 20px; }
+
+.speed-btn-no {
+  width: 100%; height: 52px;
+  background: rgba(255,255,255,.08);
+  border: 1.5px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  color: #888; font-family: 'Nunito', sans-serif;
+  font-size: 16px; font-weight: 800;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: background .15s;
+}
+.speed-btn-no:hover { background: rgba(255,255,255,.14); color: #bbb; }
+.speed-btn-no span { font-size: 14px; }
+
+.speed-loop-info {
+  color: rgba(255,255,255,.3);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-top: 4px;
+}
+</style>
+
+<!-- ═══════════════════════════════════
+     SPIN WHEEL PAGE HTML
+═══════════════════════════════════ -->
+<div class="page" id="page-spin">
+
+  <!-- Topbar -->
+  <div class="spin-topbar">
+    <div class="spin-topbar-left">
+      <button class="spin-back-btn" onclick="showPage('page-home')">←</button>
+      <div class="spin-topbar-title">Spin Wheel</div>
+    </div>
+    <div class="spin-count">Spin <span id="spin-count-num">28</span></div>
+  </div>
+
+  <!-- Wheel area -->
+  <div class="wheel-container">
+    <div class="big-wheel-wrap">
+      <!-- Pin -->
+      <div class="big-wheel-pin">
+        <div class="pin-top"></div>
+        <div class="pin-bottom"></div>
+      </div>
+      <!-- Canvas wheel -->
+      <canvas id="bigWheel" width="300" height="300"></canvas>
+    </div>
+
+    <!-- SPIN NOW button -->
+    <button class="spin-now-btn" id="spinBtn" onclick="startSpin()">
+      <span class="spin-play-circle">▶</span>
+      <span class="label">SPIN NOW</span>
+    </button>
+
+    <!-- Tap hint - shows after wheel stops -->
+    <div id="spinTapHint" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+      <div style="color:#fff;font-size:26px;font-weight:900;text-align:center;text-shadow:0 2px 10px rgba(0,0,0,.4);animation:pulse 1.2s ease-in-out infinite;">
+        👆 Tap to continue
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.6; transform:scale(.95); }
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════════
+     GOOGLE ADMOB REWARDED INTERSTITIAL AD
+     
+     Flow:
+     1. Spin ruke → yeh overlay dikhao
+     2. AdMob rewarded ad automatically plays
+     3. User AdMob ka khud ka Skip dabata hai (5s baad)
+     4. Ad band hote hi → 30s countdown start
+     5. 30s baad → "Spin Again?" option
+     6. Loop chalti rehti hai
+     
+     TODO: 
+       - ca-pub-XXXXXXXXXXXXXXXX → apna Publisher ID
+       - YOUR_AD_UNIT_ID         → apna Ad Unit ID
+       - index.html mein AdMob SDK script add karo
+═══════════════════════════════════════════════════ -->
+<div class="admob-overlay" id="admobOverlay">
+  <!-- Top bar -->
+  <div class="admob-topbar">
+    <span class="admob-label">Advertisement</span>
+    <button id="admobCloseBtn" onclick="onAdClose()" disabled
+      style="background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.2);border-radius:50%;width:32px;height:32px;color:#fff;font-size:14px;font-weight:900;cursor:not-allowed;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <!-- Ad content - AdMob Interstitial -->
+  <div class="admob-content" style="padding:0;overflow:hidden;">
+    <!-- AdMob Ad Unit: ca-pub-5428273092045113 / Slot: 5780365001 -->
+    <ins class="adsbygoogle"
+      style="display:block;width:100%;height:100%;min-height:250px;"
+      data-ad-client="ca-pub-5428273092045113"
+      data-ad-slot="5780365001"
+      data-ad-format="interstitial"
+      data-full-width-responsive="true">
+    </ins>
+    <div id="admobFallback" class="admob-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;">
+      <div style="font-size:64px;">📢</div>
+      <div style="color:#888;font-size:14px;font-weight:700;text-align:center;">
+        <strong style="color:#fff;font-size:16px;display:block;margin-bottom:8px;">Google AdMob</strong>
+        Publisher: ca-pub-5428273092045113<br>
+        Unit: 5780365001
+      </div>
+    </div>
+  </div>
+  <!-- Bottom bar with countdown -->
+  <div class="admob-bottombar">
+    <div class="admob-countdown-wrap">
+      <div class="admob-countdown-ring">
+        <svg viewBox="0 0 44 44">
+          <circle class="admob-ring-bg" cx="22" cy="22" r="18"/>
+          <circle class="admob-ring-fill" cx="22" cy="22" r="18" id="admobRingFill"/>
+        </svg>
+        <div class="admob-ring-num" id="admobRingNum">5</div>
+      </div>
+      <div class="admob-countdown-text">
+        <strong id="admobCountdownTitle">Ad chal raha hai...</strong>
+        <span id="admobCountdownSub">5s baad close milega</span>
+      </div>
+    </div>
+    <button class="admob-skip-btn" id="admobSkipBtn" onclick="skipAd()" disabled>Skip ▶</button>
+  </div>
+</div>
+
+<!-- RESULT PAGE -->
+<div class="page" id="page-spin-result" style="position:relative;">
+  <div class="result-topbar">
+    <div class="spin-topbar-left">
+      <button class="spin-back-btn" onclick="showPage('page-spin')">←</button>
+      <div class="spin-topbar-title">Spin Wheel</div>
+    </div>
+    <div class="spin-count">Spin <span id="result-spin-count">27</span></div>
+  </div>
+  <div class="result-number-wrap">
+    <div class="result-number" id="resultNumber">29</div>
+  </div>
+  <div class="reward-toast-bar">
+    💰 &nbsp; Reward Added
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SPINNING OPTION OVERLAY
+     30s countdown ke baad yeh dikhega
+     User "Keep Spinning" ya "No Thanks" choose kare
+     Agar Keep Spinning → phir se Ad → 30s → Spinning option (loop)
+     Agar No Thanks → Result screen
+═══════════════════════════════════ -->
+<div class="speed-overlay" id="speedOverlay">
+  <div class="speed-card">
+    <!-- Spinning icon header -->
+    <div class="speed-header">
+      <div class="speed-icon">🎡</div>
+      <div class="speed-title">Keep Spinning!</div>
+      <div class="speed-sub">Watch an ad and spin again to earn more coins! 🎡</div>
+    </div>
+    <!-- Options -->
+    <button class="speed-btn-yes" onclick="watchMoreAd()">
+      🎡 Keep Spinning! (Watch Ad)
+    </button>
+    <button class="speed-btn-no" onclick="goToResult()">
+      ✕ No Thanks, Take My Reward
+    </button>
+    <!-- Loop counter -->
+    <div class="speed-loop-info" id="speedLoopInfo">Round 1 of ∞</div>
+  </div>
+</div>
+
+
+
+<!-- ═══════════════════════════
+     30 SECOND COUNTDOWN OVERLAY
+═══════════════════════════ -->
+<style>
+.countdown-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: #c97a10;
+  z-index: 650;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 430px;
+  left: 50%; transform: translateX(-50%);
+  gap: 30px;
+}
+.countdown-overlay.show { display: flex; animation: fadeSlide .3s ease; }
+
+.cd-title {
+  color: #fff; font-size: 22px; font-weight: 900;
+  text-shadow: 0 2px 10px rgba(0,0,0,.2);
+  text-align: center; padding: 0 30px;
+}
+
+.cd-ring-wrap {
+  position: relative;
+  width: 180px; height: 180px;
+}
+.cd-ring-wrap svg {
+  width: 180px; height: 180px;
+  transform: rotate(-90deg);
+}
+.cd-ring-bg {
+  fill: none;
+  stroke: rgba(255,255,255,.15);
+  stroke-width: 10;
+}
+.cd-ring-fill {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 113;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear, stroke .4s;
+}
+.cd-number {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 72px; font-weight: 900;
+  text-shadow: 0 3px 20px rgba(0,0,0,.2);
+}
+
+.cd-sub {
+  color: rgba(255,255,255,.75);
+  font-size: 15px; font-weight: 700;
+  text-align: center; padding: 0 30px;
+  line-height: 1.6;
+}
+
+/* reward toast at bottom */
+.cd-reward-bar {
+  position: absolute; bottom: 60px;
+  background: rgba(0,0,0,.4);
+  border-radius: 40px;
+  padding: 14px 30px;
+  display: flex; align-items: center; gap: 10px;
+  color: #fff; font-size: 16px; font-weight: 800;
+}
+</style>
+
+<div class="countdown-overlay" id="countdownOverlay">
+  <!-- SIRF RING + NUMBER - KUCH NAHI -->
+  <div class="cd-ring-wrap">
+    <svg viewBox="0 0 120 120">
+      <circle class="cd-ring-bg"   cx="60" cy="60" r="54"/>
+      <circle class="cd-ring-fill" cx="60" cy="60" r="54" id="cdRingFill"
+        style="stroke-dasharray:339; stroke-dashoffset:0;"/>
+    </svg>
+    <div class="cd-number" id="cdNum">30</div>
+  </div>
+  <!-- hidden - JS ke liye -->
+  <div id="cdMsg"          style="display:none;"></div>
+  <div id="cdRewardPreview" style="display:none;"></div>
+</div>
+
+<!-- ════════════════════════════════
+     REFER & EARN PAGE CSS
+════════════════════════════════ -->
+<style>
+#page-refer { background: #c97a10; }
+
+.refer-topbar {
+  background: #6b3800;
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 14px;
+  flex-shrink: 0;
+}
+.refer-back {
+  background: none; border: none;
+  color: #fff; font-size: 24px; cursor: pointer; padding: 0;
+}
+.refer-topbar-title {
+  color: #fff; font-size: 18px; font-weight: 900;
+}
+
+.refer-content {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 30px 20px 60px;
+  gap: 28px;
+}
+.refer-content::-webkit-scrollbar { display: none; }
+
+/* Illustration area */
+.refer-illustration {
+  width: 220px; height: 220px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.refer-phone {
+  width: 120px; height: 190px;
+  background: linear-gradient(160deg, #e040fb, #ff6d00);
+  border-radius: 20px;
+  border: 4px solid #222;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.3);
+  position: relative; z-index: 2;
+}
+.refer-megaphone {
+  position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 60px; z-index: 3;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+  animation: float 3s ease-in-out infinite;
+}
+.refer-coin1 { position: absolute; top: 20px; right: 20px; font-size: 30px; animation: float 2.5s ease-in-out infinite; }
+.refer-coin2 { position: absolute; bottom: 30px; right: 10px; font-size: 28px; animation: float 3.2s ease-in-out infinite .4s; }
+.refer-star  { position: absolute; top: 30px; right: 60px; font-size: 24px; animation: float 2.8s ease-in-out infinite .2s; }
+.refer-pct   { position: absolute; left: 20px; bottom: 40px; font-size: 26px; animation: float 3s ease-in-out infinite .6s; }
+.refer-msg   { position: absolute; top: 10px; left: 30px; font-size: 22px; }
+
+/* Copy Refer Link box */
+.refer-link-box {
+  width: 100%;
+  border: 2px dashed rgba(255,255,255,.6);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  transition: background .15s;
+}
+.refer-link-box:active { background: rgba(255,255,255,.1); }
+.refer-link-text {
+  color: #fff; font-size: 18px; font-weight: 900;
+  display: flex; align-items: center; gap: 10px;
+}
+.refer-copy-icon {
+  font-size: 22px; color: rgba(255,255,255,.8);
+}
+
+/* Reward text */
+.refer-reward-label {
+  color: rgba(255,255,255,.85);
+  font-size: 18px; font-weight: 700;
+  text-align: center;
+}
+.refer-reward-amount {
+  color: #fff;
+  font-size: 42px; font-weight: 900;
+  text-shadow: 0 3px 14px rgba(0,0,0,.2);
+  text-align: center;
+  margin-top: -10px;
+}
+
+/* Share buttons */
+.refer-share-row {
+  display: flex; gap: 24px; justify-content: center;
+}
+.refer-share-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  cursor: pointer;
+  background: none; border: none;
+}
+.refer-share-circle {
+  width: 68px; height: 68px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  transition: transform .12s;
+}
+.refer-share-btn:active .refer-share-circle { transform: scale(.93); }
+.refer-share-label {
+  color: rgba(255,255,255,.9);
+  font-size: 13px; font-weight: 800;
+}
+
+/* Info text */
+.refer-info {
+  color: #fff;
+  font-size: 16px; font-weight: 700;
+  text-align: center; line-height: 1.7;
+  padding: 0 10px;
+}
+.refer-info-hindi {
+  color: #fff;
+  font-size: 16px; font-weight: 900;
+  text-align: center; line-height: 1.8;
+  padding: 0 10px;
+}
+
+/* Copied toast */
+.refer-copied {
+  display: none;
+  position: fixed; top: 28px; left: 50%; transform: translateX(-50%);
+  background: #333; color: #ffd855;
+  padding: 12px 28px; border-radius: 30px;
+  font-size: 15px; font-weight: 800;
+  z-index: 9999; white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  animation: fadeSlide .3s ease;
+}
+.refer-copied.show { display: block; }
+</style>
+
+<!-- ════════════════════════════════
+     REFER & EARN PAGE HTML
+════════════════════════════════ -->
+<div class="page" id="page-refer">
+
+  <!-- Topbar -->
+  <div class="refer-topbar">
+    <button class="refer-back" onclick="showPage('page-home')">←</button>
+    <div class="refer-topbar-title">Refer &amp; Earn</div>
+  </div>
+
+  <div class="refer-content">
+
+    <!-- Illustration -->
+    <div class="refer-illustration">
+      <div class="refer-msg">💬</div>
+      <div class="refer-megaphone">📣</div>
+      <div class="refer-phone">📱</div>
+      <div class="refer-coin1">💰</div>
+      <div class="refer-coin2">💵</div>
+      <div class="refer-star">⭐</div>
+      <div class="refer-pct">🏷️</div>
+    </div>
+
+    <!-- Copy Refer Link -->
+    <div class="refer-link-box" onclick="copyReferLink()">
+      <div class="refer-link-text">
+        📋 &nbsp; Copy Refer Link
+      </div>
+      <div class="refer-copy-icon">⧉</div>
+    </div>
+
+    <!-- Reward amount -->
+    <div>
+      <div class="refer-reward-label">Get Instant Reward</div>
+      <div class="refer-reward-amount">200 Coins</div>
+    </div>
+
+    <!-- Share buttons -->
+    <div class="refer-share-row">
+      <button class="refer-share-btn" onclick="shareVia('facebook')">
+        <div class="refer-share-circle">
+          <span style="color:#1877f2;font-weight:900;font-size:32px;">f</span>
+        </div>
+        <div class="refer-share-label">Facebook</div>
+      </button>
+      <button class="refer-share-btn" onclick="shareVia('whatsapp')">
+        <div class="refer-share-circle">
+          <span style="font-size:32px;">💬</span>
+        </div>
+        <div class="refer-share-label">Whatsapp</div>
+      </button>
+      <button class="refer-share-btn" onclick="shareVia('more')">
+        <div class="refer-share-circle">
+          <span style="color:#555;font-weight:900;font-size:22px;">•••</span>
+        </div>
+        <div class="refer-share-label">More</div>
+      </button>
+    </div>
+
+    <!-- Info English -->
+    <div class="refer-info">
+      You will receive your bonus only after your referred friend successfully registers in the app.
+    </div>
+
+    <!-- Info Hindi -->
+    <div class="refer-info-hindi">
+      आपको अपना बोनस तभी मिलेगा जब आपके द्वारा रेफर किया गया दोस्त रजिस्टर करेगा
+    </div>
+
+  </div>
+</div>
+
+<!-- Copied toast -->
+<div class="refer-copied" id="referCopied">✅ Refer Link Copied!</div>
+
+
+
+<!-- ════════════════════════════════
+     NEWS PAGE CSS
+════════════════════════════════ -->
+<style>
+#page-news { background: #f5f5f5; }
+
+.news-topbar {
+  background: #c97a10;
+  padding: 14px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.news-topbar-left { display: flex; align-items: center; gap: 12px; }
+.news-back {
+  background: none; border: none;
+  color: #fff; font-size: 24px; cursor: pointer; padding: 0;
+}
+.news-topbar-title { color: #fff; font-size: 18px; font-weight: 900; }
+.news-count-badge {
+  background: rgba(255,255,255,.2);
+  color: #fff; font-size: 15px; font-weight: 900;
+  padding: 4px 14px; border-radius: 20px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.news-list {
+  flex: 1; overflow-y: auto;
+  padding: 12px;
+  display: flex; flex-direction: column; gap: 0;
+  background: #fff;
+}
+.news-list::-webkit-scrollbar { display: none; }
+
+/* News Article Card */
+.news-article {
+  background: #fff;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background .15s;
+}
+.news-article:active { background: #fafafa; }
+
+.news-article-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px; padding: 0 14px;
+}
+.news-source-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #6a0dad;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px; color: #fff; font-weight: 900;
+}
+.news-source-name { font-size: 14px; font-weight: 800; color: #333; }
+.news-source-time { font-size: 12px; color: #999; font-weight: 600; margin-top: 2px; }
+
+.news-article-img {
+  width: 100%; height: 200px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #e0e0e0, #ccc);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.news-article-img img {
+  width: 100%; height: 200px; object-fit: cover;
+}
+
+.news-article-title {
+  font-size: 17px; font-weight: 800; color: #111;
+  line-height: 1.4; padding: 0 14px; margin-bottom: 6px;
+}
+.news-article-desc {
+  font-size: 13px; color: #777; font-weight: 600;
+  line-height: 1.5; padding: 0 14px;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* Visit Site button */
+.news-visit-btn {
+  margin: 10px 14px 0;
+  background: #6b3800;
+  color: #fff; font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 900;
+  padding: 12px 20px; border-radius: 10px;
+  border: none; cursor: pointer; width: calc(100% - 28px);
+  letter-spacing: .5px;
+}
+
+/* Loading spinner */
+.news-loading {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px 20px; gap: 16px;
+}
+.news-spinner {
+  width: 44px; height: 44px;
+  border: 4px solid #f0e0c0;
+  border-top-color: #c97a10;
+  border-radius: 50%;
+  animation: spin-idle 0.8s linear infinite;
+}
+.news-loading-text { color: #aaa; font-size: 14px; font-weight: 700; }
+
+/* ── AD VIEWER OVERLAY ── */
+.ad-viewer-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: #fff;
+  z-index: 800;
+  flex-direction: column;
+  max-width: 430px;
+  left: 50%; transform: translateX(-50%);
+}
+.ad-viewer-overlay.show { display: flex; }
+
+.ad-viewer-topbar {
+  background: #c97a10;
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.ad-viewer-title { color: #fff; font-size: 15px; font-weight: 900; }
+.ad-viewer-progress {
+  color: rgba(255,255,255,.8); font-size: 13px; font-weight: 700;
+}
+
+/* Progress bar */
+.ad-progress-track {
+  height: 4px; background: #f0e0c0; flex-shrink: 0;
+}
+.ad-progress-bar-fill {
+  height: 100%; background: #c97a10;
+  transition: width .3s ease;
+}
+
+/* Ad slot area */
+.ad-slot-area {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px; gap: 16px;
+  background: #fafafa;
+}
+
+/* Banner Ad placeholder */
+.banner-ad-box {
+  width: 100%;
+  background: linear-gradient(135deg, #f8f8f8, #efefef);
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px; gap: 8px;
+  min-height: 120px;
+}
+.banner-ad-label {
+  font-size: 11px; color: #bbb; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.banner-ad-content {
+  font-size: 13px; color: #999; font-weight: 700; text-align: center;
+}
+
+/* ╔════════════════════════════════════════╗
+   ║  ADMOB BANNER AD PLACEHOLDER           ║
+   ║  data-ad-client="ca-pub-XXXXXX"        ║
+   ║  data-ad-slot="XXXXXXXXXX"             ║
+   ╚════════════════════════════════════════╝ */
+
+.ad-nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+.ad-nav-btn {
+  background: #c97a10;
+  color: #fff; font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 900;
+  padding: 12px 28px; border-radius: 50px;
+  border: none; cursor: pointer;
+  box-shadow: 0 3px 12px rgba(200,120,0,.3);
+  transition: transform .1s;
+}
+.ad-nav-btn:active { transform: scale(.96); }
+.ad-nav-btn:disabled { opacity: .4; cursor: not-allowed; }
+.ad-skip-info {
+  color: #bbb; font-size: 13px; font-weight: 700; text-align: center;
+}
+
+/* Coins earned popup */
+.coins-popup {
+  position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+  background: #1a1a1a; color: #ffd855;
+  padding: 12px 24px; border-radius: 30px;
+  font-size: 16px; font-weight: 900;
+  z-index: 9999; opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+  white-space: nowrap;
+}
+.coins-popup.show { opacity: 1; }
+</style>
+
+<!-- ════════════════════════════════
+     NEWS PAGE HTML
+════════════════════════════════ -->
+<div class="page" id="page-news">
+
+  <div class="news-topbar">
+    <div class="news-topbar-left">
+      <button class="news-back" onclick="showPage('page-home')">←</button>
+      <div class="news-topbar-title">News</div>
+    </div>
+    <div class="news-count-badge">News <span id="news-coin-count">29</span></div>
+  </div>
+
+  <div class="news-list" id="newsList">
+    <div class="news-loading">
+      <div class="news-spinner"></div>
+      <div class="news-loading-text">News load ho rahi hai...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════
+     AD VIEWER OVERLAY (15 banner ads)
+════════════════════════════════ -->
+<div class="ad-viewer-overlay" id="adViewerOverlay">
+
+  <div class="ad-viewer-topbar">
+    <div class="ad-viewer-title" id="adViewerTitle">Ad 1 of 15</div>
+    <div class="ad-viewer-progress" id="adViewerProgress">0/15</div>
+  </div>
+
+  <div class="ad-progress-track">
+    <div class="ad-progress-bar-fill" id="adProgressBarFill" style="width:0%"></div>
+  </div>
+
+  <div class="ad-slot-area" id="adSlotArea">
+    <!-- Banner ads will be injected here -->
+  </div>
+
+  <div class="ad-nav-row">
+    <div class="ad-skip-info" id="adSkipInfo">5s baad Next milega</div>
+    <button class="ad-nav-btn" id="adNextBtn" onclick="nextAd()" disabled>Next →</button>
+  </div>
+
+</div>
+
+<!-- Coins popup -->
+<div class="coins-popup" id="coinsPopup">🪙 +2 Coins!</div>
+
+
+
+
+<!-- ══ REDEEM UPI POPUP ══ -->
+
+<!-- ══ REDEEM PLAY POPUP ══ -->
+
+
+
+
+<!-- ══ WOO HOOO POPUP ══ -->
+<style>
+.woohoo-coins {
+  font-size:52px; font-weight:900; color:#c97a10;
+  line-height:1; margin:4px 0;
+}
+.woohoo-sub {
+  font-size:16px; font-weight:700; color:#888; margin-bottom:8px;
+}
+.woohoo-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.45); z-index:950;
+  align-items:center; justify-content:center;
+  max-width:430px; left:50%; transform:translateX(-50%);
+}
+.woohoo-overlay.show { display:flex; animation:fadeSlide .25s ease; }
+.woohoo-card {
+  background:#fff; border-radius:22px;
+  padding:36px 28px 28px;
+  width:85%; max-width:320px;
+  display:flex; flex-direction:column;
+  align-items:center; gap:14px;
+  box-shadow:0 16px 60px rgba(0,0,0,.3);
+}
+.woohoo-circle {
+  width:72px; height:72px; border-radius:50%;
+  border:3px solid #4CAF50;
+  display:flex; align-items:center; justify-content:center;
+  font-size:34px; color:#4CAF50;
+}
+.woohoo-title {
+  font-size:26px; font-weight:900; color:#222;
+  text-align:center;
+}
+.woohoo-sub {
+  font-size:15px; font-weight:700; color:#888;
+  text-align:center; line-height:1.5;
+}
+.woohoo-ok-btn {
+  width:100%; height:54px;
+  background:#4CAF50; border:none; border-radius:12px;
+  color:#fff; font-family:'Nunito',sans-serif;
+  font-size:20px; font-weight:900;
+  cursor:pointer; transition:background .15s;
+  margin-top:4px;
+}
+.woohoo-ok-btn:hover { background:#43a047; }
+.woohoo-ok-btn:active { transform:scale(.97); }
+</style>
+
+
+
+<!-- ══ COIN ADDED POPUP ══ -->
+<style>
+.coin-added-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.5); z-index:950;
+  align-items:center; justify-content:center;
+  max-width:430px; left:50%; transform:translateX(-50%);
+}
+.coin-added-overlay.show { display:flex; animation:fadeSlide .25s ease; }
+.coin-added-card {
+  background:#fff; border-radius:22px;
+  padding:36px 28px 28px; width:82%; max-width:320px;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  box-shadow:0 16px 60px rgba(0,0,0,.3);
+}
+.coin-added-icon { font-size:60px; animation:float 1.5s ease-in-out infinite; }
+.coin-added-title { font-size:26px; font-weight:900; color:#222; }
+.coin-added-amount { font-size:32px; font-weight:900; color:#c97a10; }
+.coin-added-sub { font-size:14px; font-weight:700; color:#888; text-align:center; }
+.coin-added-ok {
+  width:100%; height:54px; background:#4CAF50;
+  border:none; border-radius:12px;
+  color:#fff; font-family:'Nunito',sans-serif;
+  font-size:20px; font-weight:900; cursor:pointer; margin-top:4px;
+}
+.coin-added-ok:active { transform:scale(.97); }
+</style>
+
+
+
+
+<!-- ══ SCRATCH AD OVERLAY (AdMob placeholder) ══ -->
+
+
+<!-- ══ COIN ADDED POPUP ══ -->
+
+
+
+<!-- ══ SPIN COUNTDOWN PAGE — FULL SCREEN ONLY RING+NUMBER ══ -->
+<div class="page" id="page-spin-countdown" style="background:#c97a10;">
+  <style>
+    #page-spin-countdown.active {
+      display:flex !important;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      position:relative;
+    }
+  </style>
+  <!-- Back button - top left -->
+  <button onclick="spinCdBack()" style="position:absolute;top:16px;left:16px;background:none;border:none;color:rgba(255,255,255,.7);font-size:28px;cursor:pointer;z-index:10;padding:8px;">←</button>
+  
+  <div style="position:relative;width:300px;height:300px;">
+    <svg viewBox="0 0 300 300" width="300" height="300" style="display:block;transform:rotate(-90deg);">
+      <circle cx="150" cy="150" r="130" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="16"/>
+      <circle id="spinCdRing" cx="150" cy="150" r="130"
+        fill="none" stroke="#fff" stroke-width="16"
+        stroke-linecap="round"
+        stroke-dasharray="817"
+        stroke-dashoffset="0"
+        style="transition:stroke-dashoffset 1s linear,stroke .5s;"/>
+    </svg>
+    <div id="spinCdNum" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:110px;font-weight:900;line-height:1;">30</div>
+  </div>
+</div>
+
+
+
+
+<!-- ════════════════════════════════
+     ADMIN PANEL PAGE
+════════════════════════════════ -->
+<style>
+#page-admin { background:#1a1a2e; }
+#page-admin.active { display:flex!important; flex-direction:column; }
+.admin-topbar {
+  background:#16213e;
+  padding:14px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0;
+}
+.admin-title { color:#fff; font-size:18px; font-weight:900; }
+.admin-content {
+  flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:14px;
+}
+.admin-section {
+  background:#16213e; border-radius:14px; padding:18px;
+}
+.admin-section h3 { color:#4CAF50; font-size:15px; font-weight:900; margin-bottom:14px; letter-spacing:.5px; }
+.admin-input {
+  width:100%; padding:12px 14px; background:#0f3460;
+  border:1.5px solid rgba(255,255,255,.1); border-radius:10px;
+  color:#fff; font-family:'Nunito',sans-serif; font-size:15px;
+  outline:none; margin-bottom:10px;
+}
+.admin-input::placeholder { color:rgba(255,255,255,.4); }
+.admin-btn {
+  width:100%; padding:13px; background:#4CAF50;
+  border:none; border-radius:10px;
+  color:#fff; font-family:'Nunito',sans-serif;
+  font-size:15px; font-weight:900; cursor:pointer;
+  margin-bottom:8px;
+}
+.admin-btn.red { background:#f44336; }
+.admin-btn.blue { background:#2196F3; }
+.admin-codes-list { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.admin-code-item {
+  background:#0f3460; border-radius:8px; padding:10px 14px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.admin-code-text { color:#fff; font-size:14px; font-weight:800; }
+.admin-code-amount { color:#4CAF50; font-size:14px; font-weight:900; }
+.admin-code-del {
+  background:#f44336; border:none; border-radius:6px;
+  color:#fff; font-size:12px; font-weight:900;
+  padding:4px 10px; cursor:pointer;
+}
+.admin-badge {
+  position:fixed; top:20px; right:20px;
+  background:#e53935; color:#fff;
+  border-radius:20px; padding:6px 14px;
+  font-size:13px; font-weight:900;
+  z-index:9999; display:none;
+}
+</style>
+
+
+<!-- WALLET PAGE -->
+<div class="page" id="page-wallet">
+  <div class="page-topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="page-back" onclick="showPage('page-home')">←</button>
+      <div class="page-title">Wallet</div>
+    </div>
+  </div>
+  <div class="wallet-balance-row">
+    <div class="wallet-bal-left">
+      <div class="wallet-bal-icon">💰</div>
+      <div>
+        <div class="wallet-bal-num" id="wallet-bal-num">0</div>
+        <div class="wallet-bal-label">Coins</div>
+      </div>
+    </div>
+    <button class="wallet-redeem-btn" onclick="showPage('page-redeem')">REDEEM</button>
+  </div>
+  <div class="wallet-tabs">
+    <button class="wallet-tab active" id="tab-tx" onclick="switchWalletTab('tx')">Transactions</button>
+    <button class="wallet-tab" id="tab-red" onclick="switchWalletTab('red')">Redeems</button>
+  </div>
+  <div class="wallet-tab-content" id="wallet-tx-content">
+    <div id="txList"></div>
+  </div>
+  <div class="wallet-tab-content" id="wallet-red-content" style="display:none;">
+    <div id="redeemList"></div>
+  </div>
+</div>
+
+<!-- REDEEM PAGE -->
+<div class="page" id="page-redeem">
+  <div class="page-topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="page-back" onclick="showPage('page-wallet')">←</button>
+      <div class="page-title">Redeem</div>
+    </div>
+  </div>
+  <div class="redeem-grid">
+    <div class="redeem-item" onclick="openRedeemPopup('2350','10','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">2350 Coin = 10 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('5500','30','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">5500 Coin = 30 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('8500','50','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">8500 Coin = 50 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('11000','75','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">11000 Coin = 75 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('15000','100','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">15000 Coin = 100 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('35000','250','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">35000 Coin = 250 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('70000','500','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">70000 Coin = 500 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('250000','2500','UPI')"><div class="redeem-icon">🎁</div><div class="redeem-label">250000 Coin = 2500 INR UPI</div></div>
+    <div class="redeem-item" onclick="openRedeemPopup('1800','10','Play')">
+      <div class="redeem-play-icon2"><svg viewBox="0 0 90 90" width="44" height="44"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00C6FF"/><stop offset="1" stop-color="#0072FF"/></linearGradient><linearGradient id="g2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#00E676"/><stop offset="1" stop-color="#00BFA5"/></linearGradient><linearGradient id="g3" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD740"/><stop offset="1" stop-color="#FF6D00"/></linearGradient><linearGradient id="g4" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FF4081"/><stop offset="1" stop-color="#F50057"/></linearGradient></defs><path fill="url(#g1)" d="M12 10 L45 45 L12 45 Z"/><path fill="url(#g2)" d="M12 80 L45 45 L12 45 Z"/><path fill="url(#g3)" d="M12 10 L45 45 L78 28 Z"/><path fill="url(#g4)" d="M12 80 L45 45 L78 62 Z"/><path fill="url(#g3)" d="M78 28 L45 45 L78 62 Z"/></svg></div>
+      <div class="redeem-label">1800 Coin = 10 INR Play Redeem</div>
+    </div>
+    <div class="redeem-item" onclick="openRedeemPopup('7000','50','Play')">
+      <div class="redeem-play-icon2"><svg viewBox="0 0 90 90" width="44" height="44"><defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00C6FF"/><stop offset="1" stop-color="#0072FF"/></linearGradient><linearGradient id="g6" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#00E676"/><stop offset="1" stop-color="#00BFA5"/></linearGradient><linearGradient id="g7" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD740"/><stop offset="1" stop-color="#FF6D00"/></linearGradient><linearGradient id="g8" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FF4081"/><stop offset="1" stop-color="#F50057"/></linearGradient></defs><path fill="url(#g5)" d="M12 10 L45 45 L12 45 Z"/><path fill="url(#g6)" d="M12 80 L45 45 L12 45 Z"/><path fill="url(#g7)" d="M12 10 L45 45 L78 28 Z"/><path fill="url(#g8)" d="M12 80 L45 45 L78 62 Z"/><path fill="url(#g7)" d="M78 28 L45 45 L78 62 Z"/></svg></div>
+      <div class="redeem-label">7000 Coin = 50 INR Play Redeem</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRATCH PAGE -->
+<div class="page" id="page-scratch">
+  <div class="page-topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="page-back" onclick="showPage('page-home')">←</button>
+      <div class="page-title">Scratch Card</div>
+    </div>
+    <div class="page-badge">Card <span id="scratch-count">29</span></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:20px;">
+    <div style="position:relative;width:300px;height:300px;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.3);">
+      <div style="position:absolute;inset:0;background:#FFD700;display:flex;align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 22px,rgba(255,80,30,.45) 22px,rgba(255,80,30,.45) 44px);"></div>
+        <div style="font-size:100px;z-index:1;">🎁</div>
+      </div>
+      <canvas id="scratchCanvas" width="300" height="300" onclick="tapScratch()" style="position:absolute;inset:0;width:300px;height:300px;touch-action:none;cursor:pointer;z-index:2;border-radius:20px;"></canvas>
+    </div>
+    <div id="scratchHint" class="scratch-hint">Tap To Scratch</div>
+  </div>
+</div>
+
+<!-- SCRATCH COUNTDOWN PAGE -->
+<div class="page cd-page" id="page-scratch-countdown">
+  <button class="cd-back-btn" onclick="scratchCdBack()">←</button>
+  <div style="position:relative;width:300px;height:300px;">
+    <svg viewBox="0 0 300 300" width="300" height="300" style="display:block;transform:rotate(-90deg);">
+      <circle cx="150" cy="150" r="130" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="16"/>
+      <circle id="scratchCdRing" cx="150" cy="150" r="130" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" stroke-dasharray="817" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear,stroke .5s;"/>
+    </svg>
+    <div id="scratchCdNum" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:110px;font-weight:900;line-height:1;">30</div>
+  </div>
+</div>
+
+<!-- WATCH VIDEO (direct ad, no page) -->
+
+
+
+<!-- WOO HOO POPUP -->
+<div class="woohoo-overlay" id="woohooPopup">
+  <div class="woohoo-card">
+    <div class="woohoo-circle">🎉</div>
+    <div class="woohoo-title">Woo Hooo!</div>
+    <div class="woohoo-coins" id="woohooCoins">10</div>
+    <div class="woohoo-sub">Coins mile!</div>
+    <button class="woohoo-ok-btn" onclick="closeWoohoo()">OK</button>
+  </div>
+</div>
+
+<!-- COIN ADDED POPUP -->
+<div class="coin-added-overlay" id="coinAddedPopup">
+  <div class="woohoo-card">
+    <div class="woohoo-circle">✓</div>
+    <div class="woohoo-title" id="coinAddedAmt">+15 Coin Added</div>
+    <button class="woohoo-ok-btn" onclick="_coinAddedOkClick()">OK</button>
+  </div>
+</div>
+
+<!-- SCRATCH AD OVERLAY -->
+<div class="scratch-ad-overlay" id="scratchAdOverlay" style="display:none;position:fixed;inset:0;background:#000;z-index:900;flex-direction:column;max-width:430px;left:50%;transform:translateX(-50%);">
+  <div style="background:#1a1a1a;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+    <span style="color:#aaa;font-size:11px;font-weight:700;letter-spacing:1px;">ADVERTISEMENT</span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="scratchAdTimer" style="color:#aaa;font-size:13px;font-weight:700;">5s</span>
+      <button id="scratchAdClose" style="background:rgba(255,255,255,.15);border:none;border-radius:50%;width:32px;height:32px;color:#fff;font-size:14px;cursor:pointer;">✕</button>
+    </div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;padding:10px;overflow:hidden;">
+    <!-- AdMob Watch Video Ad: ca-pub-5428273092045113 / Slot: 2725726176 -->
+    <ins class="adsbygoogle"
+      id="watchVideoAd"
+      style="display:block;width:100%;min-height:250px;"
+      data-ad-client="ca-pub-5428273092045113"
+      data-ad-slot="2725726176"
+      data-ad-format="interstitial"
+      data-full-width-responsive="true">
+    </ins>
+    <div id="watchAdFallback" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;">
+      <div style="font-size:54px;">📢</div>
+      <div style="color:#888;font-size:13px;font-weight:700;text-align:center;">
+        <strong style="color:#fff;font-size:15px;display:block;margin-bottom:6px;">Google AdMob</strong>
+        ca-app-pub-5428273092045113<br>Unit: 2725726176
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REDEEM UPI POPUP -->
+<div id="redeemUpiPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:960;align-items:center;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%);">
+  <div style="background:#fff;border-radius:20px;padding:30px 24px;width:88%;max-width:340px;display:flex;flex-direction:column;gap:18px;box-shadow:0 10px 50px rgba(0,0,0,.3);">
+    <div style="font-size:18px;font-weight:900;color:#333;text-align:center;">Enter Your Redeem Details</div>
+    <div id="redeemPopupInfo" style="font-size:13px;color:#888;font-weight:700;text-align:center;"></div>
+    <input id="redeemUpiInput" type="text" placeholder="Enter UPI ID" style="width:100%;padding:14px 0;border:none;border-bottom:2px solid #ddd;font-size:16px;font-family:'Nunito',sans-serif;outline:none;color:#333;"/>
+    <div style="display:flex;gap:12px;">
+      <button onclick="document.getElementById('redeemUpiPopup').style.display='none'" style="flex:1;height:50px;background:#ef5350;border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;">Close</button>
+      <button onclick="submitRedeemUpi()" style="flex:1;height:50px;background:#4CAF50;border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- REDEEM PLAY POPUP -->
+<div id="redeemPlayPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:960;align-items:center;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%);">
+  <div style="background:#fff;border-radius:20px;padding:30px 24px;width:88%;max-width:340px;display:flex;flex-direction:column;gap:18px;box-shadow:0 10px 50px rgba(0,0,0,.3);">
+    <div style="font-size:18px;font-weight:900;color:#333;text-align:center;">Enter Your Redeem Details</div>
+    <div id="redeemPlayInfo" style="font-size:13px;color:#888;font-weight:700;text-align:center;"></div>
+    <input id="redeemPlayInput" type="email" placeholder="Enter Your Gmail ID" style="width:100%;padding:14px 0;border:none;border-bottom:2px solid #ddd;font-size:16px;font-family:'Nunito',sans-serif;outline:none;color:#333;"/>
+    <div style="display:flex;gap:12px;">
+      <button onclick="document.getElementById('redeemPlayPopup').style.display='none'" style="flex:1;height:50px;background:#ef5350;border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;">Close</button>
+      <button onclick="submitRedeemPlay()" style="flex:1;height:50px;background:#4CAF50;border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  // Redirect: if countdown active, show countdown instead
+  if (id === 'page-spin'    && typeof spinCdActive    !== 'undefined' && spinCdActive)    { id = 'page-spin-countdown'; }
+  if (id === 'page-scratch' && typeof scratchCdActive !== 'undefined' && scratchCdActive) { id = 'page-scratch-countdown'; }
+
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  var el = document.getElementById(id);
+  if (el) { el.classList.add('active'); }
+  window.scrollTo(0, 0);
+
+  // Side effects per page
+  if (id === 'page-wallet')  { if (typeof renderWallet  === 'function') renderWallet(); }
+  if (id === 'page-scratch') { setTimeout(function(){ if (typeof _initScratch === 'function') _initScratch(); }, 100); }
+  if (id === 'page-news' && typeof newsArticles !== 'undefined' && newsArticles.length === 0) { loadNews(); }
+}
+
+// -- Toast
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 2800);
+}
+
+// -- Terms toggle
+var termsChecked = true;
+function toggleTerms() {
+  termsChecked = !termsChecked;
+  var box = document.getElementById('terms-box');
+  termsChecked ? box.classList.add('checked') : box.classList.remove('checked');
+}
+
+// -- Login
+function doLogin() {
+  var phone = document.getElementById('login-phone').value.trim();
+  var email = document.getElementById('login-email').value.trim();
+  if (!phone) { toast('! Phone number daalo!'); return; }
+  if (!email) { toast('! Gmail Id daalo!'); return; }
+  var name = email.split('@')[0];
+  var displayName = name.charAt(0).toUpperCase() + name.slice(1);
+  document.getElementById('greet-name').textContent = 'Hey, ' + displayName;
+  toast('OK Login Successful!');
+  setTimeout(function(){ showPage('page-home'); }, 700);
+}
+
+// -- Sign Up
+function doSignup() {
+  var name  = document.getElementById('signup-name').value.trim();
+  var phone = document.getElementById('signup-phone').value.trim();
+  var email = document.getElementById('signup-email').value.trim() || document.getElementById('email-display').dataset.email || '';
+  if (!name)  { toast('! Naam daalo!'); return; }
+  if (!phone) { toast('! Phone number daalo!'); return; }
+  if (!email) { toast('! Gmail Id daalo!'); return; }
+  if (!termsChecked) { toast('! Terms & Privacy Policy accept karo!'); return; }
+  document.getElementById('greet-name').textContent = 'Hey, ' + name.split(' ')[0];
+  toast(' Account ban gaya!');
+  setTimeout(function(){ showPage('page-home'); }, 700);
+}
+
+// -- Logout
+function logout() {
+  toast(' Logout ho gaye!');
+  document.getElementById('login-phone').value = '';
+  document.getElementById('login-email').value = '';
+  setTimeout(function(){ showPage('page-login'); }, 700);
+}
+
+/* ==================================
+   SPIN WHEEL LOGIC
+================================== */
+var segments = [
+  { label:'1',  color:'#FFA726' },
+  { label:'2',  color:'#FFC107' },
+  { label:'3',  color:'#FFD740' },
+  { label:'4',  color:'#29B6F6' },
+  { label:'5',  color:'#26C6DA' },
+  { label:'6',  color:'#EC407A' },
+  { label:'7',  color:'#7E57C2' },
+  { label:'8',  color:'#42A5F5' },
+  { label:'9',  color:'#26A69A' },
+  { label:'10', color:'#90A4AE' },
+  { label:'11', color:'#EF5350' },
+  { label:'12', color:'#FF7043' },
+];
+
+var currentRotation = 0;
+var isSpinning = false;
+var spinCount = 28;
+var wonSegment = null;
+var adTimer = null;
+
+function drawWheel() {
+  var canvas = document.getElementById('bigWheel');
+  var ctx = canvas.getContext('2d');
+  var cx = 150, cy = 150, r = 145;
+  var n = segments.length;
+  var arc = (2 * Math.PI) / n;
+
+  ctx.clearRect(0, 0, 300, 300);
+
+  // Outer glow ring
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r + 2, 0, 2 * Math.PI);
+  var grad = ctx.createLinearGradient(0, 0, 300, 300);
+  grad.addColorStop(0, '#ff80ff');
+  grad.addColorStop(0.5, '#4488ff');
+  grad.addColorStop(1, '#80ffcc');
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 6;
+  ctx.stroke();
+  ctx.restore();
+
+  segments.forEach(function(seg, i) {
+    var startAngle = i * arc - Math.PI / 2;
+    var endAngle   = startAngle + arc;
+
+    // Slice
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r - 4, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = seg.color;
+    ctx.fill();
+    ctx.strokeStyle = '#111';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Label
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(startAngle + arc / 2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 22px Nunito, sans-serif';
+    ctx.shadowColor = 'rgba(0,0,0,.5)';
+    ctx.shadowBlur = 4;
+    ctx.fillText(seg.label, r - 18, 8);
+    ctx.restore();
+  });
+
+  // Center circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, 22, 0, 2 * Math.PI);
+  ctx.fillStyle = '#222';
+  ctx.fill();
+  ctx.strokeStyle = '#555';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+
+// Draw on load
+drawWheel();
+
+function startSpin() {
+  if (isSpinning || spinCount <= 0) return;
+  isSpinning = true;
+  document.getElementById('spinBtn').disabled = true;
+
+  // Always land on 10, 11, or 12
+  var rewards = [10, 11, 12];
+  var rewardVal = rewards[Math.floor(Math.random() * rewards.length)];
+  wonSegment = { label: String(rewardVal), color: '#FFA726' };
+
+  // Find index of chosen segment
+  var winIndex = segments.findIndex(function(s){ return s.label === String(rewardVal); });
+  var arc = 360 / segments.length;
+  var targetAngle = 360 * 8 + (360 - winIndex * arc - arc / 2);
+  currentRotation += targetAngle;
+
+  var canvas = document.getElementById('bigWheel');
+  canvas.style.transition = 'transform 4s cubic-bezier(0.17,0.67,0.12,0.99)';
+  canvas.style.transform = 'rotate(' + currentRotation + 'deg)';
+
+  setTimeout(function() {
+    isSpinning = false;
+    spinCount--;
+    document.getElementById('spin-count-num').textContent = spinCount;
+    showSpinAd();
+  }, 4200);
+}
+
+/* == SPIN AD FLOW ==
+   Spin stops -> Ad (5s) -> Close -> Full screen 30s countdown -> Next spin
+=================================== */
+
+var spinAdTimer = null;
+var spinCdTimer = null;
+
+
+function showSpinAd() {
+  // Load AdMob ad
+  try {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    document.getElementById('admobFallback').style.display = 'none';
+  } catch(e) {
+    document.getElementById('admobFallback').style.display = 'flex';
+  }
+  var overlay  = document.getElementById('admobOverlay');
+  var closeBtn = document.getElementById('admobCloseBtn');
+  var skipBtn  = document.getElementById('admobSkipBtn');
+  var ringFill = document.getElementById('admobRingFill');
+  var ringNum  = document.getElementById('admobRingNum');
+  var title    = document.getElementById('admobCountdownTitle');
+  var sub      = document.getElementById('admobCountdownSub');
+
+  overlay.classList.add('show');
+  closeBtn.disabled = true;
+  closeBtn.style.cursor = 'not-allowed';
+  skipBtn.disabled = true;
+  skipBtn.classList.remove('ready');
+  ringFill.style.strokeDashoffset = 0;
+  ringFill.style.stroke = '#4CAF50';
+  ringNum.textContent = '5';
+  title.textContent = 'Ad chal raha hai...';
+  sub.textContent = '5s baad close milega';
+
+  var secs = 5;
+  clearInterval(spinAdTimer);
+  spinAdTimer = setInterval(function() {
+    secs--;
+    ringNum.textContent = secs;
+    var offset = ((5 - secs) / 5) * 113;
+    ringFill.style.strokeDashoffset = offset;
+    if (secs <= 2) ringFill.style.stroke = '#f44336';
+    sub.textContent = secs > 0 ? secs + 's baad close milega' : 'Ab close karo!';
+    if (secs <= 0) {
+      clearInterval(spinAdTimer);
+      closeBtn.disabled = false;
+      closeBtn.style.cursor = 'pointer';
+      skipBtn.disabled = false;
+      skipBtn.classList.add('ready');
+      title.textContent = 'Ad khatam! OK';
+    }
+  }, 1000);
+}
+
+function onAdClose() {
+  var closeBtn = document.getElementById('admobCloseBtn');
+  if (closeBtn.disabled) return;
+  afterSpinAd();
+}
+
+function skipAd() {
+  var skipBtn = document.getElementById('admobSkipBtn');
+  if (!skipBtn.classList.contains('ready')) return;
+  afterSpinAd();
+}
+
+function afterSpinAd() {
+  clearInterval(spinAdTimer);
+  document.getElementById('admobOverlay').classList.remove('show');
+  // Add transaction
+  var coins = parseInt(wonSegment.label);
+  addTransaction('Spin Reward', coins);
+  // Show Woo hooo popup first
+  showSpinResult(coins);
+}
+
+function showSpinCountdown(coins) {
+  spinCdActive = true;
+  spinCdCoins  = coins;
+  // Reset ring
+  var ring = document.getElementById('spinCdRing');
+  var num  = document.getElementById('spinCdNum');
+  ring.style.strokeDashoffset = '0';
+  ring.style.stroke = '#fff';
+  num.textContent = '30';
+  showPage('page-spin-countdown');
+  var s = 30;
+  clearInterval(spinCdTimer);
+  spinCdTimer = setInterval(function() {
+    s--;
+    num.textContent = s;
+    ring.style.strokeDashoffset = String((30-s)/30*817);
+    if (s <= 15) ring.style.stroke = 'rgba(255,210,80,.95)';
+    if (s <=  5) ring.style.stroke = 'rgba(255,100,80,.95)';
+    if (s <= 0) {
+      clearInterval(spinCdTimer);
+      spinCdActive = false;
+      // Go to spin page - ready for next spin
+      document.getElementById('spinBtn').disabled = false;
+      showPage('page-spin');
+    }
+  }, 1000);
+}
+
+function showSpinResult(coins) {
+  document._spinCoins = coins;
+  document.getElementById('woohooCoins').textContent = coins;
+  document.getElementById('woohooPopup').classList.add('show');
+}
+
+// spin redirect handled in showPage below
+
+// Keep old names for compatibility
+function showAdMob() { showSpinAd(); }
+function goToResult() { showSpinResult(parseInt(wonSegment.label)); }
+function watchMoreAd() { showSpinAd(); }
+
+// Back from countdown -> home (timer keeps running in background)
+function spinCdBack() {
+  showPage('page-home'); // timer keeps running!
+}
+
+// Track if spin countdown is active
+var spinCdActive = false;
+var spinCdCoins  = 0;
+
+/* -- Load Promo Codes from Realtime DB -- */
+function loadPromoCodes() {
+  if (typeof rtdb === "undefined" || !rtdb) return;
+  rtdb.ref('promoCodes').on('value', function(snapshot) {
+    var data = snapshot.val();
+    if (data) {
+      Object.keys(data).forEach(function(code) {
+        PROMO_CODES[code] = data[code].amount || data[code];
+      });
+    }
+  });
+}
+// Load on start
+setTimeout(function(){ loadPromoCodes(); }, 2000);
+
+/* -- Refer Link -- */
+var REFER_CODE = 'EARN' + Math.random().toString(36).substr(2,6).toUpperCase();
+var REFER_LINK = 'https://earnapp.netlify.app/?ref=' + REFER_CODE;
+
+function copyReferLink() {
+  navigator.clipboard.writeText(REFER_LINK).catch(function() {});
+  var el = document.getElementById('referCopied');
+  el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 2500);
+}
+
+function shareVia(platform) {
+  var msg = 'Join Earn App aur pao 200 free coins! ' + REFER_LINK;
+  if (platform === 'whatsapp') {
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  } else if (platform === 'facebook') {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(REFER_LINK), '_blank');
+  } else {
+    if (navigator.share) {
+      navigator.share({ title: 'Earn App', text: msg, url: REFER_LINK });
+    } else {
+      copyReferLink();
+    }
+  }
+}
+
+/* -- Gmail Account Picker -- */
+function openEmailPicker() {
+  var picker = document.getElementById('gmail-picker');
+  var list   = document.getElementById('gmail-account-list');
+  picker.style.display = 'flex';
+  list.innerHTML = '';
+
+  var prevEmail = document.getElementById('signup-email').value;
+  var hints = [];
+  if (prevEmail && prevEmail.includes('@')) {
+    hints.push({ email: prevEmail, icon: prevEmail[0].toUpperCase(), color: '#c97a10', label: prevEmail, sub: 'Pichli baar use kiya' });
+  }
+  hints.push({ email: '', icon: 'G', color: '#4285f4', label: 'Dusra Gmail account', sub: 'Neeche type karein' });
+
+  hints.forEach(function(acc) {
+    var div = document.createElement('div');
+    div.style.cssText = 'padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;border-bottom:1px solid #f0f0f0;';
+    div.innerHTML =
+      '<div style="width:44px;height:44px;border-radius:50%;background:' + acc.color + ';display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;">' + acc.icon + '</div>' +
+      '<div style="flex:1;"><div style="font-size:15px;font-weight:800;color:#111;">' + acc.label + '</div>' +
+      '<div style="font-size:12px;color:#888;margin-top:2px;">' + acc.sub + '</div></div>' +
+      '<div style="color:#ccc;font-size:22px;">&#8250;</div>';
+    div.ontouchstart = function(){ div.style.background='#f9f9f9'; };
+    div.ontouchend   = function(){ div.style.background=''; if(acc.email) selectEmail(acc.email); };
+    div.onmousedown  = function(){ if(acc.email) selectEmail(acc.email); };
+    list.appendChild(div);
+  });
+}
+function closeEmailPicker() {
+  document.getElementById('gmail-picker').style.display = 'none';
+}
+
+function selectEmail(email) {
+  document.getElementById('signup-email').value = email;
+  var display = document.getElementById('email-display');
+  display.textContent = email;
+  display.style.color = '#fff';
+  display.dataset.email = email;
+  closeEmailPicker();
+}
+
+function selectManualEmail() {
+  var val = document.getElementById('manual-email-input').value.trim();
+  if (!val || !val.includes('@')) {
+    document.getElementById('manual-email-input').style.borderColor = '#f44336';
+    return;
+  }
+  selectEmail(val);
+}
+
+/* ==================================
+   NEWS SYSTEM
+================================== */
+
+// Real news via RSS2JSON (free API)
+var NEWS_FEEDS = [
+  { url: 'https://feeds.bbci.co.uk/news/rss.xml',         name: 'BBC News',    color: '#c00', letter: 'B' },
+  { url: 'https://timesofindia.indiatimes.com/rssfeedstopstories.cms', name: 'Times of India', color: '#e00', letter: 'T' },
+  { url: 'https://www.thehindu.com/feeder/default.rss',   name: 'The Hindu',   color: '#1a1', letter: 'H' },
+  { url: 'https://feeds.feedburner.com/ndtvnews-top-stories', name: 'NDTV',    color: '#c00', letter: 'N' },
+];
+
+var newsArticles  = [];
+var currentAdSet  = [];
+var currentAdIdx  = 0;
+var currentArticle = null;
+var adNextTimer   = null;
+var totalAdsWatched = 0;
+
+// -- Load news when page opens
+if (document.getElementById('news-coin-count')) document.getElementById('news-coin-count').textContent = '29';
+
+function loadNews() {
+  var feedUrl = NEWS_FEEDS[0].url;
+  var apiUrl  = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&api_key=pkbgkockhmxalafpjjnkxrsdcuktacrqgflppczr&count=20';
+  
+  fetch(apiUrl)
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.status === 'ok' && data.items.length > 0) {
+        newsArticles = data.items;
+        renderNews(newsArticles, data.feed);
+      } else {
+        newsArticles = getSampleNews();
+        renderNews(newsArticles, { title: 'Latest News' });
+      }
+    })
+    .catch(function() {
+      newsArticles = getSampleNews();
+      renderNews(newsArticles, { title: 'Latest News' });
+    });
+}
+
+function renderNews(articles, feed) {
+  var list = document.getElementById('newsList');
+  if (!list) return;
+  list.innerHTML = '';
+  articles.forEach(function(article, idx) {
+    var feedInfo = NEWS_FEEDS[idx % NEWS_FEEDS.length];
+    var sourceColor = feedInfo ? feedInfo.color : '#888';
+    var sourceLetter = feed && feed.title ? feed.title[0].toUpperCase() : 'N';
+    var timeAgo = getTimeAgo(article.pubDate || article.published);
+    var imgSrc = article.thumbnail || (article.enclosure && article.enclosure.link) || '';
+    var imgHtml = imgSrc
+      ? '<div class="news-article-img"><img src="' + imgSrc + '" onerror="this.parentNode.innerHTML=&quot;&quot;" /></div>'
+      : '<div class="news-article-img" style="height:180px;background:#e8d5b0;display:flex;align-items:center;justify-content:center;font-size:60px;"></div>';
+    var desc = article.description ? article.description.replace(/<[^>]*>/g, '').substring(0, 120) + '...' : '';
+    var div = document.createElement('div');
+    div.className = 'news-article';
+    div.innerHTML =
+      '<div class="news-article-header">' +
+        '<div class="news-source-icon" style="background:' + sourceColor + ';">' + sourceLetter + '</div>' +
+        '<div><div class="news-source-name">' + (feed.title || 'News') + '</div>' +
+        '<div class="news-source-time"> ' + timeAgo + '</div></div>' +
+      '</div>' + imgHtml +
+      '<div class="news-article-title">' + (article.title || '') + '</div>' +
+      '<div class="news-article-desc">' + desc + '</div>';
+    div.onclick = function() { openAdViewer(article, idx); };
+    list.appendChild(div);
+  });
+}
+
+function getTimeAgo(dateStr) {
+  if (!dateStr) return 'Recently';
+  try {
+    var diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
+    if (diff < 3600)  return Math.floor(diff/60) + ' min ago';
+    if (diff < 86400) return Math.floor(diff/3600) + ' hours ago';
+    var d = new Date(dateStr);
+    return d.getDate() + ' ' + d.toLocaleString('default',{month:'short'}) + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  } catch(e) { return 'Recently'; }
+}
+
+function getSampleNews() {
+  return [
+    { title: 'India GDP Growth Hits Record High in Q4', description: 'India economy shows strong growth momentum as manufacturing and services sectors post impressive numbers.', pubDate: new Date(Date.now()-3600000).toISOString(), thumbnail: '' },
+    { title: 'IPL 2025: Mumbai Indians vs Chennai Super Kings Preview', description: 'The much awaited clash between two IPL giants is set to take place tonight.', pubDate: new Date(Date.now()-7200000).toISOString(), thumbnail: '' },
+    { title: 'New Smartphone Launched at Under Rs.10,000', description: 'Exciting new budget smartphone features 5G, 108MP camera and 6000mAh battery.', pubDate: new Date(Date.now()-10800000).toISOString(), thumbnail: '' },
+    { title: 'Government Announces New Scheme for Students', description: 'Free laptop and scholarship announced for students scoring above 80% in board exams.', pubDate: new Date(Date.now()-14400000).toISOString(), thumbnail: '' },
+    { title: 'Petrol Diesel Price Today: Check Latest Rates', description: 'Fuel prices remain stable across major cities. Check your city rates here.', pubDate: new Date(Date.now()-18000000).toISOString(), thumbnail: '' },
+    { title: 'Weather Update: Heavy Rain Expected in These States', description: 'IMD issues orange alert for several states as monsoon advances ahead of schedule.', pubDate: new Date(Date.now()-21600000).toISOString(), thumbnail: '' },
+    { title: 'Stock Market Today: Sensex Nifty Live Updates', description: 'Markets open higher amid positive global cues. IT and banking stocks lead gains.', pubDate: new Date(Date.now()-25200000).toISOString(), thumbnail: '' },
+    { title: 'CBSE Result 2025 Declared: How to Check Online', description: 'CBSE class 10 and 12 results announced. Students can check on official website.', pubDate: new Date(Date.now()-28800000).toISOString(), thumbnail: '' },
+    { title: 'Viral Video: Man Catches Giant Fish in River', description: 'A fisherman from Bihar catches a record-breaking 80kg rohu fish, video goes viral.', pubDate: new Date(Date.now()-32400000).toISOString(), thumbnail: '' },
+    { title: 'New Railway Route Announced for North India', description: 'Indian Railways announces new Vande Bharat route connecting Delhi to Patna in 4 hours.', pubDate: new Date(Date.now()-36000000).toISOString(), thumbnail: '' },
+  ];
+}
+
+// news load handled in showPage below
+
+/* ==================================
+   AD VIEWER - 15 Banner Ads
+================================== */
+var TOTAL_ADS = 15;
+
+// Generate 15 banner ad slots
+function generateAdSlots(article) {
+  var ads = [];
+  for (var i = 1; i <= TOTAL_ADS; i++) {
+    ads.push({
+      id: i,
+      // TODO: Replace with real AdMob banner ad unit ID
+      adUnitId: 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX',
+      label: 'Banner Ad ' + i,
+    });
+  }
+  return ads;
+}
+
+function openAdViewer(article, idx) {
+  currentArticle = article;
+  currentAdSet   = generateAdSlots(article);
+  currentAdIdx   = 0;
+  totalAdsWatched = 0;
+
+  document.getElementById('adViewerOverlay').classList.add('show');
+  showBannerAd(0);
+}
+
+function showBannerAd(idx) {
+  var overlay  = document.getElementById('adViewerOverlay');
+  var title    = document.getElementById('adViewerTitle');
+  var progress = document.getElementById('adViewerProgress');
+  var fill     = document.getElementById('adProgressBarFill');
+  var slot     = document.getElementById('adSlotArea');
+  var nextBtn  = document.getElementById('adNextBtn');
+  var skipInfo = document.getElementById('adSkipInfo');
+
+  title.textContent    = 'Ad ' + (idx+1) + ' of ' + TOTAL_ADS;
+  progress.textContent = (idx+1) + '/' + TOTAL_ADS;
+  fill.style.width     = ((idx + 1) / TOTAL_ADS * 100) + '%';
+
+  nextBtn.disabled = true;
+  nextBtn.textContent = idx < TOTAL_ADS - 1 ? 'Next ->' : 'Read News OK';
+
+  // -- Render banner ad slot --
+  slot.innerHTML =
+    '<div style="text-align:center;margin-bottom:10px;">' +
+      '<span style="font-size:11px;color:#bbb;font-weight:700;letter-spacing:1px;">ADVERTISEMENT</span>' +
+    '</div>' +
+    '<div class="banner-ad-box" style="min-height:250px;">' +
+      '<div style="font-size:40px;"></div>' +
+      '<div class="banner-ad-label">Google AdMob Banner</div>' +
+      '<div class="banner-ad-content">Ad Slot ' + (idx+1) + ' of ' + TOTAL_ADS + '<br>' +
+        '<span style="font-size:11px;color:#ccc;">ca-pub-XXXXXXXXXXXXXXXX</span>' +
+      '</div>' +
+    '</div>' +
+    '<div style="text-align:center;margin-top:10px;font-size:13px;color:#bbb;font-weight:700;">Har ad dekhne par +2 coins milenge</div>';
+
+  // Unlock Next after 5 seconds
+  var secs = 5;
+  skipInfo.textContent = secs + 's baad Next milega';
+  clearInterval(adNextTimer);
+  adNextTimer = setInterval(function() {
+    secs--;
+    if (secs > 0) {
+      skipInfo.textContent = secs + 's baad Next milega';
+    } else {
+      clearInterval(adNextTimer);
+      nextBtn.disabled = false;
+      skipInfo.textContent = idx < TOTAL_ADS - 1 ? 'Next ad dekho' : 'News padhne ke liye click karo';
+      totalAdsWatched++;
+      showCoinsPopup('+2 Coins!');
+    }
+  }, 1000);
+}
+
+
+/* == MISSING FUNCTIONS == */
+
+// Daily Bonus
+function showDailyBonusPopup() { }
+function closePopup(id) {
+  document.getElementById(id).classList.remove('show');
+}
+function dailyBonusOk() {
+  closePopup('dailyBonusPopup');
+  showAd(function() {
+    addTransaction('Daily Bonus', 10);
+    document.getElementById('woohooCoins').textContent = '10';
+    document.getElementById('woohooPopup').classList.add('show');
+  });
+}
+
+// Promocode
+function showPromocodePopup() { }
+
+// Watch Video
+function startWatchAd() {
+  var coins = Math.floor(Math.random() * 6) + 15;
+  showAd(function() {
+    addTransaction('Video Bonus', coins);
+    document.getElementById('woohooCoins').textContent = coins;
+    document.getElementById('woohooPopup').classList.add('show');
+  }, 'watch');
+}
+
+// Redeem
+function submitRedeemUpi() {
+  var upi = document.getElementById('redeemUpiInput').value.trim();
+  if (!upi) { toast('! UPI ID daalo!'); return; }
+  if (totalBalance < parseInt(_redeemCoins)) { toast('X Coins kam hain!'); return; }
+  redeemHistory.unshift({ name:'Rs.'+_redeemInr+' UPI', date:getNow(), detail:upi, coins:_redeemCoins });
+  totalBalance -= parseInt(_redeemCoins);
+  document.getElementById('redeemUpiPopup').style.display = 'none';
+  toast('OK Redeem Submit! Rs.' + _redeemInr + ' milega');
+  renderWallet();
+}
+function submitRedeemPlay() {
+  var gmail = document.getElementById('redeemPlayInput').value.trim();
+  if (!gmail) { toast('! Gmail ID daalo!'); return; }
+  if (totalBalance < parseInt(_redeemCoins)) { toast('X Coins kam hain!'); return; }
+  redeemHistory.unshift({ name:'Rs.'+_redeemInr+' Play', date:getNow(), detail:gmail, coins:_redeemCoins });
+  totalBalance -= parseInt(_redeemCoins);
+  document.getElementById('redeemPlayPopup').style.display = 'none';
+  toast('OK Play Redeem Submit!');
+  renderWallet();
+}
+
+// News nextAd
+function nextAd() {
+  currentAdIdx++;
+  if (currentAdIdx >= TOTAL_ADS) {
+    document.getElementById('adViewerOverlay').classList.remove('show');
+    showCoinsPopup(' +' + (TOTAL_ADS * 2) + ' Coins!');
+    if (currentArticle && currentArticle.link) window.open(currentArticle.link, '_blank');
+    var curr = parseInt(document.getElementById('news-coin-count').textContent) || 0;
+    document.getElementById('news-coin-count').textContent = Math.max(0, curr - 1);
+  } else {
+    showBannerAd(currentAdIdx);
+  }
+}
+
+// Admin
+function adminLogin() {
+  var pass = document.getElementById('adminPassInput').value;
+  if (pass === ADMIN_PASSWORD) {
+    adminLoggedIn = true;
+    document.getElementById('adminLoginSection').style.display = 'none';
+    document.getElementById('adminDashboard').style.display = 'flex';
+    renderAdminCodes();
+  } else {
+    toast('X Wrong Password!');
+  }
+}
+function adminAddPromo() {
+  var code   = document.getElementById('newPromoCode').value.trim().toUpperCase();
+  var amount = parseInt(document.getElementById('newPromoAmount').value);
+  if (!code)   { toast('! Code likhho!'); return; }
+  if (!amount) { toast('! Amount likhho!'); return; }
+  if (PROMO_CODES[code]) { toast('! Code pehle se hai!'); return; }
+  PROMO_CODES[code] = amount;
+  document.getElementById('newPromoCode').value = '';
+  document.getElementById('newPromoAmount').value = '';
+  renderAdminCodes();
+  toast('OK Code "' + code + '" add ho gaya!');
+}
+function adminDeletePromo(code) {
+  delete PROMO_CODES[code];
+  renderAdminCodes();
+  toast(' Code deleted!');
+}
+
+// Secret admin access
+var adminTapCount = 0, adminTapTimer = null;
+function adminTap() {
+  adminTapCount++;
+  clearTimeout(adminTapTimer);
+  adminTapTimer = setTimeout(function(){ adminTapCount = 0; }, 2000);
+  if (adminTapCount >= 5) {
+    adminTapCount = 0;
+    adminLoggedIn = false;
+    document.getElementById('adminLoginSection').style.display = 'block';
+    document.getElementById('adminDashboard').style.display = 'none';
+    document.getElementById('adminPassInput').value = '';
+    showPage('page-admin');
+  }
+}
+
+
+/* == MISSING FUNCTIONS == */
+
+// Wallet tab switch
+function switchWalletTab(tab) {
+  document.getElementById('wallet-tx-content').style.display = tab==='tx' ? 'block' : 'none';
+  document.getElementById('wallet-red-content').style.display = tab==='red' ? 'block' : 'none';
+  document.getElementById('tab-tx').classList.toggle('active', tab==='tx');
+  document.getElementById('tab-red').classList.toggle('active', tab==='red');
+}
+
+// Transaction system
+var transactions = [];
+var redeemHistory = [];
+var totalBalance = 0;
+
+function getNow() {
+  var d=new Date(), months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var h=d.getHours(), m=d.getMinutes(), ampm=h>=12?'PM':'AM';
+  h=h%12||12;
+  return d.getDate()+' '+months[d.getMonth()]+' '+h+':'+(m<10?'0'+m:m)+' '+ampm;
+}
+
+function addTransaction(name, amount) {
+  transactions.unshift({name:name, date:getNow(), amount:amount});
+  totalBalance += amount;
+  var el = document.getElementById('wallet-bal-num');
+  if (el) el.textContent = totalBalance;
+  var cpNum = document.getElementById('cp-num');
+  if (cpNum) cpNum.textContent = totalBalance;
+}
+
+function renderWallet() {
+  var balEl = document.getElementById('wallet-bal-num');
+  if (balEl) balEl.textContent = totalBalance;
+  var txEl = document.getElementById('txList');
+  if (txEl) {
+    txEl.innerHTML = transactions.length === 0
+      ? '<div class="wallet-empty"><div class="wallet-empty-icon"></div><div class="wallet-empty-text">No Transactions Yet</div></div>'
+      : transactions.map(function(tx){
+          var color = tx.amount >= 0 ? '#ffd855' : '#ff6b6b';
+          var prefix = tx.amount >= 0 ? '+' : '';
+          return '<div class="tx-item"><div class="tx-icon"></div><div class="tx-info"><div class="tx-name">'+tx.name+'</div><div class="tx-date">'+tx.date+'</div></div><div class="tx-amount" style="color:'+color+'">'+prefix+tx.amount+'</div></div>';
+        }).join('');
+  }
+  var redEl = document.getElementById('redeemList');
+  if (redEl) {
+    redEl.innerHTML = redeemHistory.length === 0
+      ? '<div class="wallet-empty"><div class="wallet-empty-icon"></div><div class="wallet-empty-text">No Redeem History</div></div>'
+      : redeemHistory.map(function(r){
+          return '<div class="tx-item"><div class="tx-icon"></div><div class="tx-info"><div class="tx-name">'+r.name+'</div><div class="tx-date">'+r.date+' - '+r.detail+'</div></div><div class="tx-amount" style="color:#ff6b6b">-'+r.coins+'</div></div>';
+        }).join('');
+  }
+}
+
+// Redeem popup
+var _redeemCoins, _redeemInr, _redeemType;
+function openRedeemPopup(coins, inr, type) {
+  _redeemCoins=coins; _redeemInr=inr; _redeemType=type;
+  if (type==='Play') {
+    document.getElementById('redeemPlayInfo').textContent = coins+' Coins = Rs.'+inr+' Play Redeem';
+    document.getElementById('redeemPlayInput').value='';
+    document.getElementById('redeemPlayPopup').style.display='flex';
+  } else {
+    document.getElementById('redeemPopupInfo').textContent = coins+' Coins = Rs.'+inr+' INR UPI';
+    document.getElementById('redeemUpiInput').value='';
+    document.getElementById('redeemUpiPopup').style.display='flex';
+  }
+}
+function submitRedeemUpi() {
+  var upi = document.getElementById('redeemUpiInput').value.trim();
+  if (!upi) { toast('! UPI ID daalo!'); return; }
+  if (totalBalance < parseInt(_redeemCoins)) { toast('X Coins kam hain! '+_redeemCoins+' chahiye'); return; }
+  redeemHistory.unshift({name:'Rs.'+_redeemInr+' UPI', date:getNow(), detail:upi, coins:_redeemCoins});
+  totalBalance -= parseInt(_redeemCoins);
+  transactions.unshift({name:'UPI Redeem Rs.'+_redeemInr, date:getNow(), amount:-parseInt(_redeemCoins)});
+  document.getElementById('redeemUpiPopup').style.display='none';
+  toast('OK Request Submit! Rs.'+_redeemInr+' milega');
+  renderWallet();
+}
+function submitRedeemPlay() {
+  var gmail = document.getElementById('redeemPlayInput').value.trim();
+  if (!gmail) { toast('! Gmail ID daalo!'); return; }
+  if (totalBalance < parseInt(_redeemCoins)) { toast('X Coins kam hain!'); return; }
+  redeemHistory.unshift({name:'Rs.'+_redeemInr+' Play', date:getNow(), detail:gmail, coins:_redeemCoins});
+  totalBalance -= parseInt(_redeemCoins);
+  transactions.unshift({name:'Play Redeem Rs.'+_redeemInr, date:getNow(), amount:-parseInt(_redeemCoins)});
+  document.getElementById('redeemPlayPopup').style.display='none';
+  toast('OK Play Redeem Submit!');
+  renderWallet();
+}
+
+// Promo code
+var PROMO_CODES = {'EARN100':100,'BONUS50':50,'WELCOME200':200,'SPECIAL75':75};
+var usedCodes = [];
+function submitPromocode() {
+  var code = document.getElementById('promoInput').value.trim().toUpperCase();
+  if (!code) { toast('! Promocode daalo!'); return; }
+  closePopup('promocodePopup');
+  if (usedCodes.indexOf(code) !== -1) { setTimeout(function(){ toast('X Code pehle use ho chuka!'); }, 200); return; }
+  var amount = PROMO_CODES[code];
+  if (amount) {
+    usedCodes.push(code);
+    addTransaction('Promo: '+code, amount);
+    setTimeout(function(){
+      document.getElementById('woohooCoins').textContent = amount;
+      document._spinCoins = undefined;
+      document.getElementById('woohooPopup').classList.add('show');
+    }, 200);
+  } else {
+    setTimeout(function(){ toast('X Invalid Promocode!'); }, 200);
+  }
+}
+
+// WooHoo popup close
+function closeWoohoo() {
+  document.getElementById('woohooPopup').classList.remove('show');
+  if (document._spinCoins !== undefined) {
+    var coins = document._spinCoins;
+    document._spinCoins = undefined;
+    showSpinCountdown(coins);
+  }
+}
+
+// Scratch card
+/* == SCRATCH CARD - TAP ONCE AUTO SCRATCH == */
+var _scratchCoins = 15;
+var _scratchDone  = false;
+var scratchCdTimer = null;
+var scratchCdActive = false;
+
+function tapScratch() {
+  if (_scratchDone) return;
+  _scratchDone = true;
+  var canvas = document.getElementById('scratchCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var steps = 0;
+  var timer = setInterval(function() {
+    ctx.globalCompositeOperation = 'destination-out';
+    for (var i = 0; i < 20; i++) {
+      ctx.beginPath();
+      ctx.arc(Math.random()*300, Math.random()*300, 38, 0, Math.PI*2);
+      ctx.fill();
+    }
+    steps++;
+    if (steps >= 25) {
+      clearInterval(timer);
+      ctx.clearRect(0, 0, 300, 300);
+      document.getElementById('scratchHint').textContent = ' ' + _scratchCoins + ' Coins Mile!';
+      var coins = _scratchCoins;
+      var cnt = Math.max(0, parseInt(document.getElementById('scratch-count').textContent) - 1);
+      document.getElementById('scratch-count').textContent = cnt;
+      setTimeout(function(){ _showScratchAd(coins, cnt); }, 300);
+    }
+  }, 30);
+}
+
+function _initScratch() {
+  _scratchDone  = false;
+  _scratchCoins = Math.random() < 0.5 ? 15 : 20;
+  var canvas = document.getElementById('scratchCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  ctx.globalCompositeOperation = 'source-over';
+  var g = ctx.createLinearGradient(0,0,300,300);
+  g.addColorStop(0,'#d4a820'); g.addColorStop(.5,'#b8900e'); g.addColorStop(1,'#d4a820');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,300,300);
+  ctx.fillStyle = 'rgba(255,255,255,.45)';
+  ctx.font = 'bold 20px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('* SCRATCH HERE *', 150, 90);
+  ctx.fillText('* SCRATCH HERE *', 150, 155);
+  ctx.fillText('* SCRATCH HERE *', 150, 220);
+  document.getElementById('scratchHint').textContent = 'Tap To Scratch';
+}
+
+function _showScratchAd(coins, cnt) {
+  showAd(function() {
+    _showCoinAdded(coins, cnt);
+  }, 'scratch');
+}
+
+var _pendingCoins = 15, _pendingCnt = 0;
+function _showCoinAdded(coins, cnt) {
+  _pendingCoins = coins;
+  _pendingCnt   = cnt;
+  document.getElementById('coinAddedAmt').textContent = '+' + coins + ' Coin Added';
+  document.getElementById('coinAddedPopup').style.display = 'flex';
+}
+function _coinAddedOkClick() {
+  document.getElementById('coinAddedPopup').style.display = 'none';
+  scratchCdActive = true;
+  showPage('page-scratch-countdown');
+  _startCd(_pendingCoins, _pendingCnt);
+}
+
+function _startCd(coins, cnt) {
+  var ring = document.getElementById('scratchCdRing');
+  var num  = document.getElementById('scratchCdNum');
+  var s = 30;
+  ring.style.strokeDashoffset = '0';
+  ring.style.stroke = '#fff';
+  num.textContent = '30';
+  clearInterval(scratchCdTimer);
+  scratchCdTimer = setInterval(function(){
+    s--;
+    num.textContent = s;
+    ring.style.strokeDashoffset = String((30-s)/30*817);
+    if (s <= 15) ring.style.stroke = 'rgba(255,210,80,.95)';
+    if (s <=  5) ring.style.stroke = 'rgba(255,100,80,.95)';
+    if (s <= 0) {
+      clearInterval(scratchCdTimer);
+      scratchCdActive = false;
+      addTransaction('Scratch Card Reward', _pendingCoins);
+      _initScratch();
+      showPage('page-scratch');
+    }
+  }, 1000);
+}
+
+function scratchCdBack() {
+  showPage('page-home');
+}
+
+// Admin
+function renderAdminCodes() {
+  var list = document.getElementById("adminCodesList");
+  if (!list) return;
+  var codes = Object.keys(PROMO_CODES);
+  document.getElementById("statTotalCodes").textContent = codes.length;
+  document.getElementById("statUsedCodes").textContent = usedCodes.length;
+  document.getElementById("statActiveCodes").textContent = codes.length - usedCodes.length;
+  list.innerHTML = "";
+  if (codes.length === 0) {
+    list.innerHTML = "<div style='color:#555;padding:10px;text-align:center;'>Koi code nahi</div>";
+    return;
+  }
+  codes.forEach(function(code) {
+    var used = usedCodes.indexOf(code) !== -1;
+    var item = document.createElement("div");
+    item.className = "admin-code-item";
+    var label = document.createElement("div");
+    label.innerHTML = "<div class='admin-code-text'>" + code + (used ? " (USED)" : "") + "</div><div class='admin-code-amount'>+" + PROMO_CODES[code] + " Coins</div>";
+    var btn = document.createElement("button");
+    btn.className = "admin-code-del";
+    btn.textContent = "Delete";
+    btn.setAttribute("data-code", code);
+    btn.onclick = function() { adminDeletePromo(this.getAttribute("data-code")); };
+    item.appendChild(label);
+    item.appendChild(btn);
+    list.appendChild(item);
+  });
+}
+
+function closeFAD() {
+  clearInterval(fadTimer);
+  if (fadCallback) { fadCallback(); fadCallback = null; }
+}
+
+var fadTimer = null;
+// Generic ad show - used by watch, scratch, daily bonus
+var _adTimer = null;
+// Ad unit IDs
+var AD_UNITS = {
+  spin:    '5780365001',
+  watch:   '2725726176',
+  scratch: '3480271191',
+  default: '3480271191'
+};
+
+function showAd(callback, adType) {
+  var overlay  = document.getElementById('scratchAdOverlay');
+  var closeBtn = document.getElementById('scratchAdClose');
+  var timerEl  = document.getElementById('scratchAdTimer');
+  if (!overlay) { if (callback) callback(); return; }
+  // Set correct ad unit
+  var slot = AD_UNITS[adType] || AD_UNITS['default'];
+  var ins = document.getElementById('genericAdSlot');
+  if (ins) {
+    ins.setAttribute('data-ad-slot', slot);
+    ins.innerHTML = '';
+  }
+  // Load AdMob ad
+  try {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    var fb = document.getElementById('watchAdFallback');
+    if (fb) fb.style.display = 'none';
+  } catch(e) {}
+  // Reset
+  clearInterval(_adTimer);
+  overlay.style.display = 'flex';
+  closeBtn.disabled = true;
+  closeBtn.style.opacity = '.3';
+  closeBtn.onclick = null;
+  var secs = 5;
+  timerEl.textContent = secs + 's';
+  _adTimer = setInterval(function() {
+    secs--;
+    timerEl.textContent = secs > 0 ? secs + 's' : 'Close';
+    if (secs <= 0) {
+      clearInterval(_adTimer);
+      closeBtn.disabled = false;
+      closeBtn.style.opacity = '1';
+      closeBtn.onclick = function() {
+        overlay.style.display = 'none';
+        closeBtn.onclick = null;
+        if (callback) callback();
+      };
+    }
+  }, 1000);
+}
+function showFAD(type, callback) { showAd(callback); }
+var fadType = '';
+var fadCallback = null;
+
+
+// Handle Android back button via popstate
+window.addEventListener('popstate', function(e) {
+  // Close any open overlays first
+  var overlays = [
+    document.getElementById('woohooPopup'),
+    document.getElementById('coinAddedPopup'),
+    document.getElementById('scratchAdOverlay'),
+    document.getElementById('admobOverlay'),
+    document.getElementById('redeemUpiPopup'),
+    document.getElementById('redeemPlayPopup'),
+    document.getElementById('dailyBonusPopup'),
+    document.getElementById('promocodePopup')
+  ];
+  var closedOverlay = false;
+  overlays.forEach(function(el) {
+    if (!el) return;
+    var visible = el.style.display === 'flex' || el.classList.contains('show');
+    if (visible) {
+      el.style.display = 'none';
+      el.classList.remove('show');
+      closedOverlay = true;
+    }
+  });
+  if (closedOverlay) {
+    history.pushState({ page: 'overlay' }, '', location.hash);
+    return;
+  }
+
+  // Go back in page history
+  _pageHistory.pop(); // remove current
+  var prev = _pageHistory.length > 0 ? _pageHistory[_pageHistory.length - 1] : 'page-home';
+
+  // Special: if on countdown, just go home
+  var active = document.querySelector('.page.active');
+  var activeId = active ? active.id : '';
+  if (activeId === 'page-spin-countdown') { clearInterval(spinCdTimer); spinCdActive = false; }
+  if (activeId === 'page-scratch-countdown') { clearInterval(scratchCdTimer); scratchCdActive = false; }
+
+  // login/signup can't go back
+  if (prev === 'page-login' || prev === 'page-signup') {
+    _origShowPage(prev);
+    return;
+  }
+
+  _origShowPage(prev || 'page-home');
+  history.pushState({ page: prev }, '', '#' + (prev || 'page-home'));
+});
+
+// Set initial hash
+try {
+  history.replaceState({ page: 'page-login' }, '', '#page-login');
+} catch(e) {}
+
+
+</script>
+</body>
+</html><!-- Firebase SDKs (loaded before main script) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+try {
+  var firebaseConfig = {
+    apiKey: "AIzaSyD4VeC1EfVHoUzQ7wSDY6h-lfeNwg6Xdn0",
+    authDomain: "earn-app-c0cd0.firebaseapp.com",
+    projectId: "earn-app-c0cd0",
+    storageBucket: "earn-app-c0cd0.firebasestorage.app",
+    messagingSenderId: "51111519181",
+    appId: "1:51111519181:web:623b5aa78490599ffb1a84",
+    databaseURL: "https://earn-app-c0cd0-default-rtdb.asia-southeast1.firebasedatabase.app"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var db   = firebase.firestore();
+  var auth = firebase.auth();
+  var rtdb = firebase.database();
+} catch(e) {
+  var db   = null;
+  var auth = null;
+}
+</script>
+
